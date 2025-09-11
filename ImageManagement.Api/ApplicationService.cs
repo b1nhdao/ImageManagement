@@ -1,4 +1,5 @@
-﻿using ImageManagement.Domain.AggregatesModel.ImageAggregate;
+﻿using ImageManagement.Api.Services;
+using ImageManagement.Domain.AggregatesModel.ImageAggregate;
 using ImageManagement.Domain.AggregatesModel.UploaderAggregate;
 using ImageManagement.Infrastructure;
 using ImageManagement.Infrastructure.Repositories;
@@ -22,6 +23,8 @@ namespace ImageManagement.Api
 
             builder.Services.AddScoped<IImageRepository, ImageRepository>();
             builder.Services.AddScoped<IUploaderRepository, UploaderRepository>();
+
+            builder.Services.AddScoped<IImageService, ImageService>();
 
             return builder;
         }

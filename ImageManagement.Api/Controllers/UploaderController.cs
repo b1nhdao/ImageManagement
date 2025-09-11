@@ -1,5 +1,6 @@
 ﻿using ImageManagement.Api.Application.Commands.Uploaders;
 using ImageManagement.Api.Application.Queries.Uploaders;
+using ImageManagement.Api.DTOs;
 using ImageManagement.Api.Models.Pagination;
 using ImageManagement.Domain.AggregatesModel.UploaderAggregate;
 using MediatR;
@@ -27,8 +28,10 @@ namespace ImageManagement.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddUploader(Uploader uploader)
+        public async Task<IActionResult> AddUploader(AddUploaderDTO uploaderDTO)
         {
+            var uploader = new Uploader(uploaderDTO.Id, uploaderDTO.Name);
+
             var command = new AddUploaderCommand(uploader);
             return Ok(await _mediator.Send(command));
         }

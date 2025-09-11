@@ -15,8 +15,6 @@ namespace ImageManagement.Domain.AggregatesModel.ImageAggregate
         [JsonIgnore]
         public Uploader Uploader { get; }
 
-
-
         public Image(Guid id, string imageUrl, string imageName, ImageSize size, DateTime uploadedTime, Guid uploaderId)
         {
             Id = id;

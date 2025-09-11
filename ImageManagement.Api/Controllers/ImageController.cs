@@ -52,5 +52,13 @@ namespace ImageManagement.Api.Controllers
             var query = new GetPagedImagesByUploaderIdQuery(id, request);
             return Ok(await _mediator.Send(query));
         }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteImage(Guid id)
+        {
+            var command = new DeleteImageCommand(id);
+            return await _mediator.Send(command) ? Ok() : NotFound();
+        }
     }
 }
