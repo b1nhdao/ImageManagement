@@ -1,4 +1,6 @@
-﻿using ImageManagement.Domain.AggregatesModel.UploaderAggregate;
+﻿using System.Text.Json.Serialization;
+using ImageManagement.Domain.AggregatesModel.UploaderAggregate;
+using ImageManagement.Domain.DomainEvents;
 using ImageManagement.Domain.SeedWork;
 
 namespace ImageManagement.Domain.AggregatesModel.ImageAggregate
@@ -10,6 +12,7 @@ namespace ImageManagement.Domain.AggregatesModel.ImageAggregate
         public ImageSize Size { get; private set; }
         public DateTime UploadedTime { get; private set; }
         public Guid UploaderId { get; private set; }
+        [JsonIgnore]
         public Uploader Uploader { get; }
 
 
@@ -22,26 +25,13 @@ namespace ImageManagement.Domain.AggregatesModel.ImageAggregate
             Size = size;
             UploadedTime = uploadedTime;
             UploaderId = uploaderId;
+
+            AddDomainEvent(new ImageAddedDomainEvent(id, uploaderId));
         }
 
         public Image()
         {
         }
 
-        public static Image Add(Guid id, string imageName, string imageUrl, ImageSize size, DateTime uploadedTime, Guid uploaderId)
-        {
-            if (uploaderId == Guid.Empty)
-            {
-                throw new Exception("Upload user Id is required");
-            }
-
-            if (imageUrl is null)
-            {
-                throw new Exception("Image URL is required");
-            }
-
-            Image image = new Image(id, imageName, imageUrl, size, uploadedTime, uploaderId);
-            return image;
-        }
     }
 }

@@ -1,4 +1,7 @@
-﻿using ImageManagement.Infrastructure;
+﻿using ImageManagement.Domain.AggregatesModel.ImageAggregate;
+using ImageManagement.Domain.AggregatesModel.UploaderAggregate;
+using ImageManagement.Infrastructure;
+using ImageManagement.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace ImageManagement.Api
@@ -11,6 +14,14 @@ namespace ImageManagement.Api
             {
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            builder.Services.AddMediatR(cfg =>
+            {
+                cfg.RegisterServicesFromAssemblyContaining(typeof(Program));
+            });
+
+            builder.Services.AddScoped<IImageRepository, ImageRepository>();
+            builder.Services.AddScoped<IUploaderRepository, UploaderRepository>();
 
             return builder;
         }

@@ -61,7 +61,7 @@ namespace ImageManagement.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("uploader", (string)null);
+                    b.ToTable("uploaders", (string)null);
                 });
 
             modelBuilder.Entity("ImageManagement.Domain.AggregatesModel.ImageAggregate.Image", b =>

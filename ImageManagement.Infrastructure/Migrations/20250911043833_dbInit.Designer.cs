@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ImageManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(ImageDbContext))]
-    [Migration("20250911041007_dbInit")]
+    [Migration("20250911043833_dbInit")]
     partial class dbInit
     {
         /// <inheritdoc />
@@ -64,7 +64,7 @@ namespace ImageManagement.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("uploader", (string)null);
+                    b.ToTable("uploaders", (string)null);
                 });
 
             modelBuilder.Entity("ImageManagement.Domain.AggregatesModel.ImageAggregate.Image", b =>

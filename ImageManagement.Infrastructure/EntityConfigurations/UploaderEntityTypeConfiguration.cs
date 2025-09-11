@@ -8,7 +8,7 @@ namespace ImageManagement.Infrastructure.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Uploader> builder)
         {
-            builder.ToTable("uploader");
+            builder.ToTable("uploaders");
             builder.HasKey(u => u.Id);
             builder.Property(u => u.UserName);
         }

@@ -12,7 +12,7 @@ namespace ImageManagement.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "uploader",
+                name: "uploaders",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -20,7 +20,7 @@ namespace ImageManagement.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_uploader", x => x.Id);
+                    table.PrimaryKey("PK_uploaders", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -39,9 +39,9 @@ namespace ImageManagement.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_images", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_images_uploader_UploaderId",
+                        name: "FK_images_uploaders_UploaderId",
                         column: x => x.UploaderId,
-                        principalTable: "uploader",
+                        principalTable: "uploaders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -59,7 +59,7 @@ namespace ImageManagement.Infrastructure.Migrations
                 name: "images");
 
             migrationBuilder.DropTable(
-                name: "uploader");
+                name: "uploaders");
         }
     }
 }
