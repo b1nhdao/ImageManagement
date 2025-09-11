@@ -1,6 +1,6 @@
 ﻿using ImageManagement.Domain.SeedWork;
 
-namespace ImageManagement.Api.Models.Pagination
+namespace ImageManagement.Api.Models.PaginationModels
 {
     public class PaginationResponse<T> where T : Entity
     {

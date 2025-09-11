@@ -71,5 +71,11 @@ namespace ImageManagement.Infrastructure.Repositories
             
             return affected > 0;
         }
+
+        public IEnumerable<Image> UploadMultipleImages(IEnumerable<Image> images)
+        {
+            _context.AddRange(images);
+            return images;
+        }
     }
 }

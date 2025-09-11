@@ -1,6 +1,6 @@
 ﻿using ImageManagement.Api.Application.Commands.Images;
 using ImageManagement.Api.Application.Queries.Images;
-using ImageManagement.Api.Models.Pagination;
+using ImageManagement.Api.Models.PaginationModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -59,6 +59,20 @@ namespace ImageManagement.Api.Controllers
         {
             var command = new DeleteImageCommand(id);
             return await _mediator.Send(command) ? Ok() : NotFound();
+        }
+
+        [HttpPost]
+        [Route("multiple")]
+        public async Task<IActionResult> UploadMultipleImages(IEnumerable<IFormFile> files, Guid uploaderId)
+        {
+            var command = new UploadMultipleImagesCommand(files, uploaderId);
+            var result = await _mediator.Send(command);
+            if (result is null)
+            {
+                return BadRequest();
+            }
+            return Ok(result);
+
         }
     }
 }

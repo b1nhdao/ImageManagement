@@ -10,5 +10,6 @@ namespace ImageManagement.Domain.AggregatesModel.ImageAggregate
         Task<(IEnumerable<Image>, int TotalCount)> GetPagedImagesAsync(int pageIndex, int pageSize, bool isDescending);
         Task<(IEnumerable<Image>, int TotalCount)> GetPagedImagesByUploaderIdAsync(Guid uploaderId, int pageIndex, int pageSize, bool isDescending);
         Task<bool> DeleteImage(Image image);
+        IEnumerable<Image> UploadMultipleImages(IEnumerable<Image> images);
     }
 }

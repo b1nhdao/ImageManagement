@@ -1,4 +1,4 @@
-﻿using ImageManagement.Api.Models.Pagination;
+﻿using ImageManagement.Api.Models.PaginationModels;
 using ImageManagement.Domain.AggregatesModel.ImageAggregate;
 using MediatR;
 

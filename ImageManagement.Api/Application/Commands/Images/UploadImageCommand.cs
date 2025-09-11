@@ -5,12 +5,12 @@ namespace ImageManagement.Api.Application.Commands.Images
 {
     public class UploadImageCommand : IRequest<Image>
     {
-        public IFormFile File { get; set; }
+        public IFormFile Files { get; set; }
         public Guid UploaderId { get; set; }
 
-        public UploadImageCommand(IFormFile file, Guid uploaderId)
+        public UploadImageCommand(IFormFile files, Guid uploaderId)
         {
-            File = file;
+            Files = files;
             UploaderId = uploaderId;
         }
     }

@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using ImageManagement.Api.Services;
+﻿using ImageManagement.Api.Services;
 using ImageManagement.Domain.AggregatesModel.ImageAggregate;
 using MediatR;
 
@@ -18,7 +17,7 @@ namespace ImageManagement.Api.Application.Commands.Images
 
         public async Task<Image> Handle(UploadImageCommand request, CancellationToken cancellationToken)
         {
-            var result = await _imageService.UploadAsync(request.File, request.UploaderId, cancellationToken);
+            var result = await _imageService.UploadAsync(request.Files, request.UploaderId, cancellationToken);
 
             var image = new Image(
                 id: Guid.NewGuid(),

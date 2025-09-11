@@ -1,7 +1,7 @@
 ﻿using ImageManagement.Api.Application.Commands.Uploaders;
 using ImageManagement.Api.Application.Queries.Uploaders;
 using ImageManagement.Api.DTOs;
-using ImageManagement.Api.Models.Pagination;
+using ImageManagement.Api.Models.PaginationModels;
 using ImageManagement.Domain.AggregatesModel.UploaderAggregate;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
