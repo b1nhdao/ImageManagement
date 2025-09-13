@@ -1,4 +1,5 @@
-﻿using ImageManagement.Api.Models.PaginationModels;
+﻿using ImageManagement.Api.Extensions;
+using ImageManagement.Api.Models.PaginationModels;
 using ImageManagement.Domain.AggregatesModel.UploaderAggregate;
 using MediatR;
 
@@ -18,7 +19,7 @@ namespace ImageManagement.Api.Application.Queries.Uploaders
             int pageIndex = request.PaginationRequest.PageIndex;
             int pageSize = request.PaginationRequest.PageSize;
             bool isDescending = request.PaginationRequest.IsDescending;
-            string keyWord = request.PaginationRequest.KeyWord;
+            string keyWord = request.PaginationRequest.KeyWord.ToUnsign();
 
             var (items, totalCount) = await _uploaderRepository.GetPagedUploaderAsync(pageIndex, pageSize, isDescending, keyWord);
 

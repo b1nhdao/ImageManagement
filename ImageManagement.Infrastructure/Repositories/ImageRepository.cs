@@ -64,18 +64,21 @@ namespace ImageManagement.Infrastructure.Repositories
             return (item, count);
         }
 
-        public async Task<bool> DeleteImage(Image image)
+        public void DeleteImage(Image image)
         {
             _context.Images.Remove(image);
-            var affected = await _context.SaveChangesAsync();
-            
-            return affected > 0;
+
         }
 
         public IEnumerable<Image> UploadMultipleImages(IEnumerable<Image> images)
         {
             _context.AddRange(images);
             return images;
+        }
+
+        public void DeleteMultipleImages(IEnumerable<Image> images)
+        {
+            _context.Images.RemoveRange(images);
         }
     }
 }

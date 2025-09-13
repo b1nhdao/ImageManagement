@@ -31,9 +31,9 @@ namespace ImageManagement.Api.Application.Commands.Images
                     request.uploaderId
                 );
 
-                _imageRepository.UploadImage(image);
                 images.Add(image);
             }
+            _imageRepository.UploadMultipleImages(images);
             await _imageRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
             return images;
         }

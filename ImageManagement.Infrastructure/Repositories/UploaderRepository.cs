@@ -25,9 +25,14 @@ namespace ImageManagement.Infrastructure.Repositories
         {
             var query = _context.Uploaders.AsQueryable();
 
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                query = query.Where(u => u.UserName.ToLower().Contains(keyword.ToLower()));
+            }
+
             int count = await query.CountAsync();
 
-            query = isDescending ? query.OrderBy(i => i.UserName) : query.OrderByDescending(i => i.UserName);
+            query = isDescending ? query.OrderByDescending(i => i.UserName) : query.OrderBy(i => i.UserName);
 
             var item = await query.Skip(pageIndex * pageSize)
                                 .Take(pageSize)

@@ -14,24 +14,18 @@ namespace ImageManagement.Api.Application.Commands.Images
 
         public async Task<bool> Handle(DeleteImageCommand request, CancellationToken cancellationToken)
         {
-            var image = await _imageRepository.GetImageByIdAsync(request.Id);
-
-            if (image is null)
-            {
-                return false;
-            }
-
             try
             {
-                string physicalPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", image.ImageUrl.TrimStart('/'));
+                string physicalPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", request.Image.ImageUrl.TrimStart('/'));
 
+                _imageRepository.DeleteImage(request.Image);
+                
                 if (File.Exists(physicalPath))
                 {
                     File.Delete(physicalPath);
                 }
 
-                // already saved change async
-                return await _imageRepository.DeleteImage(image);
+                return await _imageRepository.UnitOfWork.SaveChangesAsync(cancellationToken) > 0;
             }
             catch (Exception ex)
             {

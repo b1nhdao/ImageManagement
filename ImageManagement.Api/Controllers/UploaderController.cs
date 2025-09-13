@@ -28,7 +28,7 @@ namespace ImageManagement.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddUploader(AddUploaderDTO uploaderDTO)
+        public async Task<IActionResult> AddUploader(UploaderDTO uploaderDTO)
         {
             var uploader = new Uploader(uploaderDTO.Id, uploaderDTO.Name);
 

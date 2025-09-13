@@ -1,5 +1,6 @@
 ﻿
 using System.Text.RegularExpressions;
+using System.Threading;
 using ImageManagement.Api.Models.ImageModels;
 using ImageManagement.Domain.AggregatesModel.ImageAggregate;
 using MediatR;
@@ -23,8 +24,8 @@ namespace ImageManagement.Api.Services
                 throw new ArgumentNullException(nameof(files), "Files collection cannot be null");
 
             var fileList = files.ToList();
-            if (!fileList.Any())
-                return Enumerable.Empty<ImageUploadResult>();
+            if (fileList.Count == 0)
+                return [];
 
             var results = new List<ImageUploadResult>();
             var uploadDirectory = CreateUploadDirectory();
@@ -33,23 +34,9 @@ namespace ImageManagement.Api.Services
             {
                 try
                 {
-                    var validFile = ValidateFile(file);
-                    var fileExtension = GetValidatedExtension(validFile);
-                    var generatedFileName = GenerateFileName(validFile.FileName, fileExtension);
-                    var fullPath = Path.Combine(uploadDirectory, generatedFileName);
+                    var imageUploadResult = await ConstructImageUploadResult(file, cancellationToken);
 
-                    await SaveFileAsync(validFile, fullPath, cancellationToken);
-                    var imageSize = await GetImageDimensionsAsync(fullPath, cancellationToken);
-
-                    var relativeUrl = $"/uploads/images/{generatedFileName}";
-
-                    results.Add(new ImageUploadResult(
-                        relativeUrl: relativeUrl,
-                        physicalPath: fullPath,
-                        generatedFileName: generatedFileName,
-                        size: imageSize,
-                        originalFileName: validFile.FileName
-                    ));
+                    results.Add(imageUploadResult);
                 }
                 catch (Exception ex)
                 {
@@ -62,25 +49,7 @@ namespace ImageManagement.Api.Services
 
         public async Task<ImageUploadResult> UploadAsync(IFormFile file, Guid uploaderId, CancellationToken cancellationToken = default)
         {
-            var validFile = ValidateFile(file);
-            var fileExtension = GetValidatedExtension(validFile);
-
-            var uploadDirectory = CreateUploadDirectory();
-            var generatedFileName = GenerateFileName(validFile.FileName, fileExtension);
-            var fullPath = Path.Combine(uploadDirectory, generatedFileName);
-
-            await SaveFileAsync(validFile, fullPath, cancellationToken);
-            var imageSize = await GetImageDimensionsAsync(fullPath, cancellationToken);
-
-            var relativeUrl = $"/uploads/images/{generatedFileName}";
-
-            return new ImageUploadResult(
-                relativeUrl: relativeUrl,
-                physicalPath: fullPath,
-                generatedFileName: generatedFileName,
-                size: imageSize,
-                originalFileName: validFile.FileName
-            );
+            return await ConstructImageUploadResult(file, cancellationToken);
         }
 
         private static IFormFile ValidateFile(IFormFile file)
@@ -136,6 +105,29 @@ namespace ImageManagement.Api.Services
             await using var readStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var image = await SixLabors.ImageSharp.Image.LoadAsync<Rgba32>(readStream, cancellationToken);
             return new ImageSize(image.Height, image.Width);
+        }
+
+        private async Task<ImageUploadResult> ConstructImageUploadResult(IFormFile file, CancellationToken cancellationToken)
+        {
+            var validFile = ValidateFile(file);
+            var fileExtension = GetValidatedExtension(validFile);
+
+            var uploadDirectory = CreateUploadDirectory();
+            var generatedFileName = GenerateFileName(validFile.FileName, fileExtension);
+            var fullPath = Path.Combine(uploadDirectory, generatedFileName);
+
+            await SaveFileAsync(validFile, fullPath, cancellationToken);
+            var imageSize = await GetImageDimensionsAsync(fullPath, cancellationToken);
+
+            var relativeUrl = $"/uploads/images/{generatedFileName}";
+
+            return new ImageUploadResult(
+                relativeUrl: relativeUrl,
+                physicalPath: fullPath,
+                generatedFileName: generatedFileName,
+                size: imageSize,
+                originalFileName: validFile.FileName
+            );
         }
     }
 }

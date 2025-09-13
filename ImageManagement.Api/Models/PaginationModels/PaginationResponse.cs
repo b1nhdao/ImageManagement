@@ -9,8 +9,8 @@ namespace ImageManagement.Api.Models.PaginationModels
         public int TotalCount { get; set; }
         public IEnumerable<T> Data { get; set; } = [];
         public int TotalPages => TotalCount / PageSize;
-        public bool HasPrevious => PageIndex < TotalCount;
-        public bool HasNext => !HasPrevious;
+        public bool HasPrevious => PageIndex < TotalPages;
+        public bool HasNext => PageIndex > TotalPages;
 
         public PaginationResponse(int pageIndex, int pageSize, int totalCount, IEnumerable<T> data)
         {

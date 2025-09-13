@@ -4,13 +4,23 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>08c63e58-45ce-44be-8292-5e87ea6834ba</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="wwwroot\uploads\images\NewFolder\**" />
+    <Content Remove="wwwroot\uploads\images\NewFolder\**" />
+    <EmbeddedResource Remove="wwwroot\uploads\images\NewFolder\**" />
+    <None Remove="wwwroot\uploads\images\NewFolder\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
@@ -18,10 +28,6 @@
   <ItemGroup>
     <ProjectReference Include="..\ImageManagement.Domain\ImageManagement.Domain.csproj" />
     <ProjectReference Include="..\ImageManagement.Infrastructure\ImageManagement.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\uploads\images\" />
   </ItemGroup>
 
 </Project>

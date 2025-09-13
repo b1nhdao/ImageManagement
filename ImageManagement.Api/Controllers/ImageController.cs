@@ -1,6 +1,8 @@
 ﻿using ImageManagement.Api.Application.Commands.Images;
 using ImageManagement.Api.Application.Queries.Images;
+using ImageManagement.Api.DTOs;
 using ImageManagement.Api.Models.PaginationModels;
+using ImageManagement.Domain.AggregatesModel.ImageAggregate;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,16 +19,11 @@ namespace ImageManagement.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> UploadImage(IFormFile file, Guid uploaderId)
+        [HttpGet]
+        public async Task<IActionResult> GetImages([FromQuery]PaginationRequest request)
         {
-            var command = new UploadImageCommand(file, uploaderId);
-            var result = await _mediator.Send(command);
-            if (result is null)
-            {
-                return BadRequest();
-            }
-            return Ok(result);
+            var query = new GetPagedImagesQuery(request);
+            return Ok(await _mediator.Send(query));
         }
 
         [HttpGet]
@@ -37,28 +34,17 @@ namespace ImageManagement.Api.Controllers
             var result = await _mediator.Send(query);
             return result is null ? NotFound() : Ok(result);
         }
-
-        [HttpGet]
-        public async Task<IActionResult> GetImages([FromQuery]PaginationRequest request)
+        
+        [HttpPost]
+        public async Task<IActionResult> UploadImage(IFormFile file, Guid uploaderId)
         {
-            var query = new GetPagedImagesQuery(request);
-            return Ok(await _mediator.Send(query));
-        }
-
-        [HttpGet]
-        [Route("uploader/{id}")]
-        public async Task<IActionResult> GetImagesByUploaderId(Guid id, [FromQuery] PaginationRequest request)
-        {
-            var query = new GetPagedImagesByUploaderIdQuery(id, request);
-            return Ok(await _mediator.Send(query));
-        }
-
-        [HttpDelete]
-        [Route("{id}")]
-        public async Task<IActionResult> DeleteImage(Guid id)
-        {
-            var command = new DeleteImageCommand(id);
-            return await _mediator.Send(command) ? Ok() : NotFound();
+            var command = new UploadImageCommand(file, uploaderId);
+            var result = await _mediator.Send(command);
+            if (result is null)
+            {
+                return BadRequest();
+            }
+            return Ok(result);
         }
 
         [HttpPost]
@@ -72,7 +58,33 @@ namespace ImageManagement.Api.Controllers
                 return BadRequest();
             }
             return Ok(result);
+        }
 
+
+        [HttpGet]
+        [Route("uploader/{id}")]
+        public async Task<IActionResult> GetImagesByUploaderId(Guid id, [FromQuery] PaginationRequest request)
+        {
+            var query = new GetPagedImagesByUploaderIdQuery(id, request);
+            return Ok(await _mediator.Send(query));
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteImage(ImageDTO imageDto)
+        {
+            var image = new Image(imageDto.Id, imageDto.ImageUrl, imageDto.ImageUrl, imageDto.Size, imageDto.UploadedTime, imageDto.UploaderId);
+
+            var command = new DeleteImageCommand(image);
+            return await _mediator.Send(command) ? Ok() : BadRequest();
+        }
+
+        [HttpDelete]
+        [Route("multiple")]
+        public async Task<IActionResult> DeleteMultipleImages(IEnumerable<ImageDTO> imageDTOs)
+        {
+            var images = imageDTOs.Select(imageDto => new Image(imageDto.Id, imageDto.ImageUrl, imageDto.ImageUrl, imageDto.Size, imageDto.UploadedTime, imageDto.UploaderId)).ToList();
+            var command = new DeleteMultipleImagesCommand(images);
+            return await _mediator.Send(command) ? Ok() : BadRequest();
         }
     }
 }
