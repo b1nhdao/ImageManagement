@@ -2,16 +2,16 @@
 
 namespace ImageManagement.Api.DTOs
 {
-    public class ImageDTO
+    public class ImageDeleteDTO
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } 
         public string ImageUrl { get; set; } = string.Empty;
         public string ImageName { get; set; } = string.Empty;
         public ImageSize Size { get; set; }
         public DateTime UploadedTime { get; set; }
         public Guid UploaderId { get; set; }
 
-        public ImageDTO(Guid id, string imageUrl, string imageName, ImageSize size, DateTime uploadedTime, Guid uploaderId)
+        public ImageDeleteDTO(Guid id, string imageUrl, string imageName, ImageSize size, DateTime uploadedTime, Guid uploaderId)
         {
             Id = id;
             ImageUrl = imageUrl;

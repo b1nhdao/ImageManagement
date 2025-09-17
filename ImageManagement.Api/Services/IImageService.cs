@@ -1,4 +1,5 @@
 ﻿using ImageManagement.Api.Models.ImageModels;
+using ImageManagement.Domain.AggregatesModel.ImageAggregate;
 
 namespace ImageManagement.Api.Services
 {

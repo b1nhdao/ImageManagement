@@ -7,9 +7,9 @@ namespace ImageManagement.Api.Application.Commands.Images
     public class UploadImageCommandHandler : IRequestHandler<UploadImageCommand, Image>
     {
         private readonly IImageRepository _imageRepository;
-        private readonly IImageService _imageService;
+        private readonly IImageServiceTest _imageService;
 
-        public UploadImageCommandHandler(IImageRepository imageRepository, IImageService imageService)
+        public UploadImageCommandHandler(IImageRepository imageRepository, IImageServiceTest imageService)
         {
             _imageRepository = imageRepository;
             _imageService = imageService;
@@ -17,15 +17,14 @@ namespace ImageManagement.Api.Application.Commands.Images
 
         public async Task<Image> Handle(UploadImageCommand request, CancellationToken cancellationToken)
         {
-            var result = await _imageService.UploadAsync(request.Files, request.UploaderId, cancellationToken);
+            var result = await _imageService.UploadAsync(request.Files, request.UploaderId, request.ImageType, cancellationToken);
 
             var image = new Image(
-                id: Guid.NewGuid(),
-                imageUrl: result.RelativeUrl,
-                imageName: result.OriginalFileName,
-                size: result.Size,
-                uploadedTime: DateTime.UtcNow,
-                uploaderId: request.UploaderId
+                result.RelativeUrl,
+                result.OriginalFileName,
+                result.Size,
+                DateTime.UtcNow,
+                request.UploaderId
             );
 
             _imageRepository.UploadImage(image);

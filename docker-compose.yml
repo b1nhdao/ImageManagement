@@ -1,0 +1,29 @@
+services:
+  db: 
+    image: postgres:17
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin_123
+      POSTGRES_DB: my_database
+    ports:
+      - "5555:5432" 
+    volumes:
+      - db_data:/var/lib/postgresql/data 
+
+  imagemanagement.api:
+    image: ${DOCKER_REGISTRY-}imagemanagementapi
+    container_name: image_management
+    ports:
+      - "8080:8080" 
+    build:
+      context: .
+      dockerfile: ImageManagement.Api/Dockerfile
+    depends_on:
+      - db
+    volumes:
+      - my_images:/app/wwwroot/uploads
+
+volumes:
+  db_data: 
+  my_images:  

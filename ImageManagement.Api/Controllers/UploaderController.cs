@@ -30,7 +30,7 @@ namespace ImageManagement.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> AddUploader(UploaderDTO uploaderDTO)
         {
-            var uploader = new Uploader(uploaderDTO.Id, uploaderDTO.Name);
+            var uploader = new Uploader(uploaderDTO.Name);
 
             var command = new AddUploaderCommand(uploader);
             return Ok(await _mediator.Send(command));

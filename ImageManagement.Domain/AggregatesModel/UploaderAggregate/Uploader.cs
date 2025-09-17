@@ -6,9 +6,8 @@ namespace ImageManagement.Domain.AggregatesModel.UploaderAggregate
     {
         public string UserName { get; private set; }
 
-        public Uploader(Guid id, string userName)
+        public Uploader(string userName) 
         {
-            Id = id;
             UserName = userName;
         }
 

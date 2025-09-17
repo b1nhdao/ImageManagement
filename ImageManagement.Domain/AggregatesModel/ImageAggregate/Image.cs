@@ -15,21 +15,27 @@ namespace ImageManagement.Domain.AggregatesModel.ImageAggregate
         [JsonIgnore]
         public Uploader Uploader { get; }
 
-        public Image(Guid id, string imageUrl, string imageName, ImageSize size, DateTime uploadedTime, Guid uploaderId)
+        public Image(string imageUrl, string imageName, ImageSize size, DateTime uploadedTime, Guid uploaderId) 
         {
-            Id = id;
             ImageUrl = imageUrl;
             ImageName = imageName;
             Size = size;
             UploadedTime = uploadedTime;
             UploaderId = uploaderId;
 
-            AddDomainEvent(new ImageAddedDomainEvent(id, uploaderId));
+            AddDomainEvent(new ImageAddedDomainEvent(this.Id, uploaderId));
+        }
+
+        public static Image GetImage(Guid id, string imageUrl, string imageName, ImageSize size, DateTime uploadedTime, Guid uploaderId)
+        {
+            var image = new Image(imageUrl, imageName, size, uploadedTime, uploaderId);
+            image.Id = id;
+
+            return image;
         }
 
         public Image()
         {
         }
-
     }
 }

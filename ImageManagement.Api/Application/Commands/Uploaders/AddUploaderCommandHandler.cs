@@ -14,7 +14,7 @@ namespace ImageManagement.Api.Application.Commands.Uploaders
 
         public async Task<Uploader> Handle(AddUploaderCommand request, CancellationToken cancellationToken)
         {
-            var uploader = new Uploader(request.Uploader.Id, request.Uploader.UserName);
+            var uploader = new Uploader(request.Uploader.UserName);
 
             uploader = _uploaderRepository.AddUploader(request.Uploader);
 
