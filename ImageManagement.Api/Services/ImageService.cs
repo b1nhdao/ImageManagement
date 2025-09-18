@@ -70,8 +70,6 @@ namespace ImageManagement.Api.Services
 
         private string CreateUploadDirectory()
         {
-            var thuFolder = new ThuFolder();
-
             var webRoot = _env.WebRootPath ?? Path.Combine(_env.ContentRootPath, "wwwroot");
             var uploadDirectory = Path.Combine(webRoot, "uploads", "images");
             Directory.CreateDirectory(uploadDirectory);
@@ -125,7 +123,6 @@ namespace ImageManagement.Api.Services
 
             return new ImageUploadResult(
                 relativeUrl,
-                fullPath,
                 generatedFileName,
                 imageSize,
                 validFile.FileName

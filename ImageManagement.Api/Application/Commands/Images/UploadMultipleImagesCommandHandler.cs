@@ -17,7 +17,7 @@ namespace ImageManagement.Api.Application.Commands.Images
 
         public async Task<IEnumerable<Image>> Handle(UploadMultipleImagesCommand request, CancellationToken cancellationToken)
         {
-            var results = await _imageService.UploadMultipleAsync(request.Images, request.UploaderId, request.ImageType, cancellationToken);
+            var results = await _imageService.UploadMultipleAsync(request.Images, request.UploaderId, request.FolderTypeKey, cancellationToken);
             var images = new List<Image>();
 
             foreach (var result in results)

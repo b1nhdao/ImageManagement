@@ -4,13 +4,14 @@
     {
         private const string FOLDER_TYPE = "other";
 
-        public OtherFolder() : base(FOLDER_TYPE)
+        public OtherFolder(string name, string description) : base(name, description)
         {
         }
 
         public override string CreateLocation()
         {
-            return $"{FOLDER_TYPE}";
+            var now = DateTime.Now;
+            return $"{now.Year}-{now.Month:D2}-{FOLDER_TYPE}";
         }
     }
 }

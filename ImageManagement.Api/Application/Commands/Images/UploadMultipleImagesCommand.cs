@@ -7,13 +7,13 @@ namespace ImageManagement.Api.Application.Commands.Images
     {
         public IEnumerable<IFormFile> Images { get; set; } = [];
         public Guid UploaderId { get; set; }
-        public ImageType ImageType { get; set; }
+        public string FolderTypeKey { get; set; }
 
-        public UploadMultipleImagesCommand(IEnumerable<IFormFile> images, Guid uploaderId, ImageType imageType)
+        public UploadMultipleImagesCommand(IEnumerable<IFormFile> images, Guid uploaderId, string folderTypeKey)
         {
             Images = images;
             UploaderId = uploaderId;
-            ImageType = imageType;
+            FolderTypeKey = folderTypeKey;
         }
     }
 }

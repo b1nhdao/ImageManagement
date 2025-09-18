@@ -7,7 +7,7 @@ namespace ImageManagement.Api.Services
 {
     public class ImageServiceTest : IImageServiceTest
     {
-        private static readonly string[] AllowedExtensions = [".jpg", ".jpeg", ".png", ".webp", ".gif"];
+        private static readonly string[] AllowedExtensions = [".jpg", ".jpeg", ".png"];
         private readonly IWebHostEnvironment _env;
 
         public ImageServiceTest(IWebHostEnvironment env)
@@ -15,7 +15,7 @@ namespace ImageManagement.Api.Services
             _env = env;
         }
 
-        public async Task<IEnumerable<ImageUploadResult>> UploadMultipleAsync(IEnumerable<IFormFile> files, Guid uploaderId, ImageType imageType, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<ImageUploadResult>> UploadMultipleAsync(IEnumerable<IFormFile> files, Guid uploaderId, string folderTypeKey, CancellationToken cancellationToken = default)
         {
             if (files == null)
                 throw new ArgumentNullException(nameof(files), "Files collection cannot be null");
@@ -25,7 +25,7 @@ namespace ImageManagement.Api.Services
                 return [];
 
             var results = new List<ImageUploadResult>();
-            var folder = FolderFactory.CreateFolder(imageType);
+            var folder = FolderFactory.CreateFolder(folderTypeKey);
 
             foreach (var file in fileList)
             {
@@ -43,9 +43,9 @@ namespace ImageManagement.Api.Services
             return results;
         }
 
-        public async Task<ImageUploadResult> UploadAsync(IFormFile file, Guid uploaderId, ImageType imageType, CancellationToken cancellationToken = default)
+        public async Task<ImageUploadResult> UploadAsync(IFormFile file, Guid uploaderId, string folderTypeKey, CancellationToken cancellationToken = default)
         {
-            var folder = FolderFactory.CreateFolder(imageType);
+            var folder = FolderFactory.CreateFolder(folderTypeKey);
             return await ConstructImageUploadResult(file, folder, cancellationToken);
         }
 
@@ -119,11 +119,10 @@ namespace ImageManagement.Api.Services
             var relativeUrl = $"/uploads/images/{folder.TargetFolder}/{generatedFileName}";
 
             return new ImageUploadResult(
-                relativeUrl: relativeUrl,
-                physicalPath: fullPath,
-                generatedFileName: generatedFileName,
-                size: imageSize,
-                originalFileName: validFile.FileName
+                relativeUrl,
+                generatedFileName,
+                imageSize,
+                validFile.FileName
             );
         }
     }

@@ -17,7 +17,7 @@ namespace ImageManagement.Api.Application.Commands.Images
 
         public async Task<Image> Handle(UploadImageCommand request, CancellationToken cancellationToken)
         {
-            var result = await _imageService.UploadAsync(request.Files, request.UploaderId, request.ImageType, cancellationToken);
+            var result = await _imageService.UploadAsync(request.Files, request.UploaderId, request.FolderTypeKey, cancellationToken);
 
             var image = new Image(
                 result.RelativeUrl,

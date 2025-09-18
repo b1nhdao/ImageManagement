@@ -36,9 +36,9 @@ namespace ImageManagement.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadImageByType(IFormFile file, Guid uploaderId, ImageType imageType)
+        public async Task<IActionResult> UploadImageByType(IFormFile file, [FromForm]Guid uploaderId, [FromForm]string folderTypeKey)
         {
-            var command = new UploadImageCommand(file, uploaderId, imageType);
+            var command = new UploadImageCommand(file, uploaderId, folderTypeKey);
             var result = await _mediator.Send(command);
             if (result is null)
             {
@@ -49,9 +49,9 @@ namespace ImageManagement.Api.Controllers
 
         [HttpPost]
         [Route("multiple")]
-        public async Task<IActionResult> UploadMultipleImages(IEnumerable<IFormFile> files, Guid uploaderId, ImageType imageType)
+        public async Task<IActionResult> UploadMultipleImages(IEnumerable<IFormFile> files, [FromForm]Guid uploaderId, [FromForm]string folderTypeKey)
         {
-            var command = new UploadMultipleImagesCommand(files, uploaderId, imageType);
+            var command = new UploadMultipleImagesCommand(files, uploaderId, folderTypeKey);
             var result = await _mediator.Send(command);
             if (result is null)
             {

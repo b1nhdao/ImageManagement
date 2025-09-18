@@ -4,14 +4,14 @@
     {
         public const string FOLDER_TYPE = "thu";
 
-        public ThuFolder() : base(FOLDER_TYPE)
+        public ThuFolder(string name, string description) : base(name, description)
         {
         }
 
-
         public override string CreateLocation()
         {
-            return $"{DateTime.Now.Year}-{DateTime.Now.Month:D2}-{FOLDER_TYPE}";
+            var now = DateTime.Now;
+            return $"{now.Year}-{now.Month:D2}-{FOLDER_TYPE}";
         }
     }
 }

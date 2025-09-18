@@ -2,13 +2,13 @@
 {
     public static class FolderFactory
     {
-        public static BaseFolder CreateFolder(ImageType imageType)
+        public static BaseFolder CreateFolder(string key)
         {
-            return imageType switch
+            return key switch
             {
-                ImageType.Chi => new ChiFolder(),
-                ImageType.Thu => new ThuFolder(),
-                _ => new OtherFolder()
+                "chi" => new ChiFolder($"Folder {key}", $"Contains {key} images in {key} Folder"),
+                "thu" => new ThuFolder($"Folder {key}", $"Contains {key} images in {key} Folder"),
+                _ => new OtherFolder("Folder Other", "Contains uncategorized images in Others Folder")
             };
         }
     }
