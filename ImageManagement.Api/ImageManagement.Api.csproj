@@ -10,13 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="wwwroot\uploads\images\2025-09-chi\**" />
-    <Content Remove="wwwroot\uploads\images\2025-09-chi\**" />
-    <EmbeddedResource Remove="wwwroot\uploads\images\2025-09-chi\**" />
-    <None Remove="wwwroot\uploads\images\2025-09-chi\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -33,7 +26,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
-    <Folder Include="wwwroot\uploads\images\" />
   </ItemGroup>
 
 </Project>

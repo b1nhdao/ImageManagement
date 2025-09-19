@@ -42,7 +42,7 @@ namespace ImageManagement.Infrastructure.Repositories
             return (item, count);
         }
 
-        public async Task<Uploader?> GetUploaderByIdAsync(Guid id)
+        public async Task<Uploader?> GetUploaderByIdAsync(int id)
         {
             return await _context.Uploaders.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
         }

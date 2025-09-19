@@ -6,6 +6,6 @@ namespace ImageManagement.Domain.AggregatesModel.UploaderAggregate
     {
         Uploader AddUploader (Uploader uploader);
         Task<(IEnumerable<Uploader>, int TotalCount)> GetPagedUploaderAsync(int pageIndex, int pageSize, bool isDescending, string keyword);
-        Task<Uploader?> GetUploaderByIdAsync(Guid id);
+        Task<Uploader?> GetUploaderByIdAsync(int id);
     }
 }

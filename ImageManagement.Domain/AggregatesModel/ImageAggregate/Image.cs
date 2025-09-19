@@ -9,17 +9,19 @@ namespace ImageManagement.Domain.AggregatesModel.ImageAggregate
     {
         public string ImageUrl { get; private set; }
         public string ImageName { get; private set; }
-        public ImageSize Size { get; private set; }
+        public ImageDemensions Demension { get; private set; }
+        public long Size { get; private set; } // in KB
         public DateTime UploadedTime { get; private set; }
-        public Guid UploaderId { get; private set; }
+        public int UploaderId { get; private set; }
         [JsonIgnore]
         public Uploader Uploader { get; }
 
-        public Image(string imageUrl, string imageName, ImageSize size, DateTime uploadedTime, Guid uploaderId)
+        public Image(string imageUrl, string imageName, ImageDemensions imageDemension, long size, DateTime uploadedTime, int uploaderId)
         {
             Id = Guid.NewGuid();
             ImageUrl = imageUrl;
             ImageName = imageName;
+            Demension = imageDemension;
             Size = size;
             UploadedTime = uploadedTime;
             UploaderId = uploaderId;

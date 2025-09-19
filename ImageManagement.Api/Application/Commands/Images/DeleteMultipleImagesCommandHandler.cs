@@ -18,7 +18,7 @@ namespace ImageManagement.Api.Application.Commands.Images
             {
                 var images = await _imageRepository.GetImagesByListIds(request.Ids);
 
-                if(images.Any())
+                if(!images.Any())
                 {
                     throw new Exception("Not Found");
                 }

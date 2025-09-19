@@ -5,9 +5,9 @@ namespace ImageManagement.Domain.DomainEvents
     public class ImageAddedDomainEvent : INotification
     {
         public Guid Id { get; set; }
-        public Guid UploaderId { get; set; }
+        public int UploaderId { get; set; }
 
-        public ImageAddedDomainEvent(Guid id, Guid uploaderId)
+        public ImageAddedDomainEvent(Guid id, int uploaderId)
         {
             Id = id;
             UploaderId = uploaderId;

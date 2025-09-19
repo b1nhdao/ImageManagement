@@ -32,7 +32,7 @@ namespace ImageManagement.Api.Application.Commands.Images
                     throw new Exception(ex.Message);
                 }
                 
-                await _imageService.DeleteAsync(physicalPath, cancellationToken);
+                await _imageService.DeleteImageAsync(physicalPath, cancellationToken);
 
                 return await _imageRepository.UnitOfWork.SaveChangesAsync(cancellationToken) > 0;
             }

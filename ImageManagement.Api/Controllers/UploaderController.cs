@@ -38,7 +38,7 @@ namespace ImageManagement.Api.Controllers
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<IActionResult> GetUploaderById(Guid id)
+        public async Task<IActionResult> GetUploaderById(int id)
         {
             var query = new GetUploaderByIdQuery(id);
             var result = await _mediator.Send(query);

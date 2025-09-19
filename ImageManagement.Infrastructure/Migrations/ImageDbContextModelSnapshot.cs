@@ -36,11 +36,14 @@ namespace ImageManagement.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime>("UploadedTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("UploaderId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("UploaderId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -51,9 +54,11 @@ namespace ImageManagement.Infrastructure.Migrations
 
             modelBuilder.Entity("ImageManagement.Domain.AggregatesModel.UploaderAggregate.Uploader", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -72,7 +77,7 @@ namespace ImageManagement.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.OwnsOne("ImageManagement.Domain.AggregatesModel.ImageAggregate.ImageSize", "Size", b1 =>
+                    b.OwnsOne("ImageManagement.Domain.AggregatesModel.ImageAggregate.ImageDemensions", "Demension", b1 =>
                         {
                             b1.Property<Guid>("ImageId")
                                 .HasColumnType("uuid");
@@ -91,7 +96,7 @@ namespace ImageManagement.Infrastructure.Migrations
                                 .HasForeignKey("ImageId");
                         });
 
-                    b.Navigation("Size")
+                    b.Navigation("Demension")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

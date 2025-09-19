@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using ImageManagement.Api.Models.ImageModels;
 using ImageManagement.Domain.AggregatesModel.ImageAggregate;
 using SixLabors.ImageSharp.PixelFormats;
@@ -9,13 +10,15 @@ namespace ImageManagement.Api.Services
     {
         private static readonly string[] AllowedExtensions = [".jpg", ".jpeg", ".png"];
         private readonly IWebHostEnvironment _env;
+        private readonly IConfiguration _configuration;
 
-        public ImageService(IWebHostEnvironment env)
+        public ImageService(IWebHostEnvironment env, IConfiguration configuration)
         {
             _env = env;
+            _configuration = configuration;
         }
 
-        public async Task<IEnumerable<ImageUploadResult>> UploadMultipleAsync(IEnumerable<IFormFile> files, Guid uploaderId, string folderTypeKey, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<ImageUploadResult>> UploadMultipleImagesAsync(IEnumerable<IFormFile> files, int uploaderId, string folderTypeKey, CancellationToken cancellationToken = default)
         {
             if (files == null)
                 throw new ArgumentNullException(nameof(files), "Files collection cannot be null");
@@ -39,9 +42,10 @@ namespace ImageManagement.Api.Services
                 }
                 catch (Exception ex)
                 {
+                    // delete all uploaded files if exception occurs
                     if (uploadedPath.Any())
                     {
-                        await DeleteMultipleAsync(uploadedPath, cancellationToken);
+                        await DeleteMultipleImagesAsync(uploadedPath, cancellationToken);
                     }
 
                     throw new InvalidOperationException($"Failed to upload file '{file?.FileName}': {ex.Message}", ex);
@@ -51,7 +55,7 @@ namespace ImageManagement.Api.Services
             return results;
         }
 
-        public async Task<ImageUploadResult> UploadAsync(IFormFile file, Guid uploaderId, string folderTypeKey, CancellationToken cancellationToken = default)
+        public async Task<ImageUploadResult> UploadImageAsync(IFormFile file, int uploaderId, string folderTypeKey, CancellationToken cancellationToken = default)
         {
             var folder = FolderFactory.CreateFolder(folderTypeKey);
             return await ConstructImageUploadResult(file, folder, cancellationToken);
@@ -62,18 +66,20 @@ namespace ImageManagement.Api.Services
             return file ?? throw new ArgumentNullException(nameof(file), "File cannot be null");
         }
 
-        public async Task DeleteMultipleAsync(IEnumerable<string> paths, CancellationToken cancellationToken)
+        public async Task DeleteMultipleImagesAsync(IEnumerable<string> paths, CancellationToken cancellationToken)
         {
             foreach(var path in paths)
             {
-                if (File.Exists(path))
+                string physicalPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", path.TrimStart('/'));
+
+                if (File.Exists(physicalPath))
                 {
-                    await Task.Run(() => File.Delete(path), cancellationToken);
+                    await Task.Run(() => File.Delete(physicalPath), cancellationToken);
                 }
             }
         }
 
-        public async Task DeleteAsync(string path, CancellationToken cancellationToken)
+        public async Task DeleteImageAsync(string path, CancellationToken cancellationToken)
         {
             if (File.Exists(path))
             {
@@ -124,30 +130,48 @@ namespace ImageManagement.Api.Services
             await file.CopyToAsync(fileStream, cancellationToken);
         }
 
-        private static async Task<ImageSize> GetImageDimensionsAsync(string filePath, CancellationToken cancellationToken)
+        private static async Task<ImageDemensions> GetImageDimensionsAsync(string filePath, CancellationToken cancellationToken)
         {
             await using var readStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var image = await SixLabors.ImageSharp.Image.LoadAsync<Rgba32>(readStream, cancellationToken);
-            return new ImageSize(image.Height, image.Width);
+            return new ImageDemensions(image.Height, image.Width);
+        }
+
+        private long GetImageSizeByKbs(IFormFile file, CancellationToken cancellationToken)
+        {            
+            var imageSize = file.Length / 1024; // converting bytes to kb
+
+            var maximumUploadSize = _configuration.GetValue<int>("ImageConfiguration:MaximumUploadPerFile");
+
+            if (imageSize > maximumUploadSize)
+            {
+                throw new Exception($"File upload cant be higher than {maximumUploadSize}");
+            }
+
+            return imageSize;
         }
 
         private async Task<ImageUploadResult> ConstructImageUploadResult(IFormFile file, BaseFolder folder, CancellationToken cancellationToken)
         {
             var validFile = ValidateFile(file);
             var fileExtension = GetValidatedExtension(validFile);
+            
+            var imageSize = GetImageSizeByKbs(file, cancellationToken);
 
             var uploadDirectory = CreateUploadDirectory(folder);
             var generatedFileName = GenerateFileName(validFile.FileName, fileExtension);
             var fullPath = Path.Combine(uploadDirectory, generatedFileName);
 
             await SaveFileAsync(validFile, fullPath, cancellationToken);
-            var imageSize = await GetImageDimensionsAsync(fullPath, cancellationToken);
+
+            var imageDemensions = await GetImageDimensionsAsync(fullPath, cancellationToken);
 
             var relativeUrl = $"/uploads/images/{folder.TargetFolder}/{generatedFileName}";
 
             return new ImageUploadResult(
                 relativeUrl,
                 generatedFileName,
+                imageDemensions,
                 imageSize,
                 validFile.FileName
             );

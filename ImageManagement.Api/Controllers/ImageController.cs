@@ -61,7 +61,7 @@ namespace ImageManagement.Api.Controllers
 
         [HttpGet]
         [Route("uploader/{id}")]
-        public async Task<IActionResult> GetImagesByUploaderId(Guid id, [FromQuery] PaginationRequest request)
+        public async Task<IActionResult> GetImagesByUploaderId(int id, [FromQuery] PaginationRequest request)
         {
             var query = new GetPagedImagesByUploaderIdQuery(id, request);
             return Ok(await _mediator.Send(query));

@@ -15,7 +15,7 @@ namespace ImageManagement.Infrastructure.EntityConfigurations
             builder.Property(i => i.ImageName);
             builder.Property(i => i.ImageUrl).IsRequired();
             builder.Property(i => i.UploadedTime);
-            builder.OwnsOne(i => i.Size);
+            builder.OwnsOne(i => i.Demension);
 
             builder.Property(i => i.UploaderId).IsRequired();
 

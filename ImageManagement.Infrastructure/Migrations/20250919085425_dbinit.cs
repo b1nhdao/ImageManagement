@@ -1,12 +1,13 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace ImageManagement.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class dbInit : Migration
+    public partial class dbinit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,7 +16,8 @@ namespace ImageManagement.Infrastructure.Migrations
                 name: "uploaders",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UserName = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -30,10 +32,11 @@ namespace ImageManagement.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     ImageUrl = table.Column<string>(type: "text", nullable: false),
                     ImageName = table.Column<string>(type: "text", nullable: false),
-                    Size_Height = table.Column<int>(type: "integer", nullable: false),
-                    Size_Width = table.Column<int>(type: "integer", nullable: false),
+                    Demension_Height = table.Column<int>(type: "integer", nullable: false),
+                    Demension_Width = table.Column<int>(type: "integer", nullable: false),
+                    Size = table.Column<long>(type: "bigint", nullable: false),
                     UploadedTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UploaderId = table.Column<Guid>(type: "uuid", nullable: false)
+                    UploaderId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {

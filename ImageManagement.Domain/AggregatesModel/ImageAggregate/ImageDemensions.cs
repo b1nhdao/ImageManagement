@@ -2,18 +2,18 @@
 
 namespace ImageManagement.Domain.AggregatesModel.ImageAggregate
 {
-    public class ImageSize : ValueObject
+    public class ImageDemensions : ValueObject
     {
         public int Height { get; private set; } 
         public int Width { get; private set; }
 
-        public ImageSize(int height, int width)
+        public ImageDemensions(int height, int width)
         {
             Height = height;
             Width = width;
         }
 
-        public ImageSize()
+        public ImageDemensions()
         {
         }
 

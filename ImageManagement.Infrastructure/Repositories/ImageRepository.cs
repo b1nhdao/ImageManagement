@@ -20,7 +20,7 @@ namespace ImageManagement.Infrastructure.Repositories
             return await _context.Images.AsNoTracking().ToListAsync();
         }
 
-        public async Task<(IEnumerable<Image>, int TotalCount)> GetPagedImagesByUploaderIdAsync(Guid uploaderId, int pageIndex, int pageSize, bool isDescending)
+        public async Task<(IEnumerable<Image>, int TotalCount)> GetPagedImagesByUploaderIdAsync(int uploaderId, int pageIndex, int pageSize, bool isDescending)
         {
             var query = _context.Images.AsQueryable()
                 .Where(i => i.UploaderId == uploaderId)

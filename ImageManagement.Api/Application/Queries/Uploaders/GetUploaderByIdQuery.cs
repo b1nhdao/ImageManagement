@@ -5,9 +5,9 @@ namespace ImageManagement.Api.Application.Queries.Uploaders
 {
     public class GetUploaderByIdQuery : IRequest<Uploader?>
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
-        public GetUploaderByIdQuery(Guid id)
+        public GetUploaderByIdQuery(int id)
         {
             Id = id;
         }

@@ -6,10 +6,10 @@ namespace ImageManagement.Api.Application.Queries.Images
 {
     public class GetPagedImagesByUploaderIdQuery : IRequest<PaginationResponse<Image>>
     {
-        public Guid UploaderId { get; set; }
+        public int UploaderId { get; set; }
         public PaginationRequest PaginationRequest { get; set; }
 
-        public GetPagedImagesByUploaderIdQuery(Guid uploaderId, PaginationRequest request)
+        public GetPagedImagesByUploaderIdQuery(int uploaderId, PaginationRequest request)
         {
             UploaderId = uploaderId;
             PaginationRequest = request;
