@@ -9,12 +9,12 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace ImageManagement.Infrastructure
 {
-    public class ImageDbContext : DbContext, IUnitOfWork
+    public class AppDbContext : DbContext, IUnitOfWork
     {
         public DbSet<Image> Images { get; set; }
         public DbSet<Uploader> Uploaders { get; set; }
 
-        public ImageDbContext(DbContextOptions<ImageDbContext> options) : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
 
@@ -24,7 +24,7 @@ namespace ImageManagement.Infrastructure
 
         public IDbContextTransaction GetCurrentTransaction() => _currentTransaction;
 
-        public ImageDbContext(DbContextOptions<ImageDbContext> options, IMediator mediator) : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options, IMediator mediator) : base(options)
         {
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 

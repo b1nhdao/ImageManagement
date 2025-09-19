@@ -1,4 +1,5 @@
-﻿using ImageManagement.Domain.AggregatesModel.ImageAggregate;
+﻿using ImageManagement.Domain.AggregatesModel.FileBaseAggregate;
+using ImageManagement.Domain.AggregatesModel.ImageAggregate;
 using MediatR;
 
 namespace ImageManagement.Api.Application.Queries.Images
@@ -14,7 +15,7 @@ namespace ImageManagement.Api.Application.Queries.Images
 
         public async Task<Image?> Handle(GetImageByIdQuery request, CancellationToken cancellationToken)
         {
-            return await _imageRepository.GetImageByIdAsync(request.Id);
+            return await _imageRepository.GetByIdAsync(request.Id);
         }
     }
 }

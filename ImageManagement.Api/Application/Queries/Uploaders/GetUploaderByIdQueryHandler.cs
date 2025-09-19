@@ -14,7 +14,7 @@ namespace ImageManagement.Api.Application.Queries.Uploaders
 
         public async Task<Uploader?> Handle(GetUploaderByIdQuery request, CancellationToken cancellationToken)
         {
-            return await _uploaderRepository.GetUploaderByIdAsync(request.Id);
+            return await _uploaderRepository.GetByIdAsync(request.Id);
         }
     }
 }

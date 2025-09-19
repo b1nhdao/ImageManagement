@@ -19,7 +19,7 @@ namespace ImageManagement.Api.Application.Queries.Images
             int pageSize = request.PaginationRequest.PageSize;
             bool isDescending = request.PaginationRequest.IsDescending;
 
-            var (item, totalCount) = await _imageRepository.GetPagedImagesAsync(pageIndex,pageSize,isDescending);
+            var (item, totalCount) = await _imageRepository.GetPagedAsync(pageIndex,pageSize,isDescending);
 
             return new PaginationResponse<Image>(pageIndex, pageSize, totalCount, item);
         }

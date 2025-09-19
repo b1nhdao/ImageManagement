@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace ImageManagement.Infrastructure.Migrations
 {
-    [DbContext(typeof(ImageDbContext))]
+    [DbContext(typeof(AppDbContext))]
     [Migration("20250919085425_dbinit")]
     partial class dbinit
     {

@@ -1,4 +1,5 @@
 ﻿using ImageManagement.Api.Services;
+using ImageManagement.Domain.AggregatesModel.FileBaseAggregate;
 using ImageManagement.Domain.AggregatesModel.ImageAggregate;
 using MediatR;
 
@@ -19,13 +20,13 @@ namespace ImageManagement.Api.Application.Commands.Images
         {
             try
             {
-                var imageExisting = await _imageRepository.GetImageByIdAsync(request.Id) ?? throw new ArgumentNullException($"Image with {request.Id} not found int the database");
+                var imageExisting = await _imageRepository.GetByIdAsync(request.Id) ?? throw new ArgumentNullException($"Image with {request.Id} not found int the database");
                 
-                string physicalPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imageExisting.ImageUrl.TrimStart('/'));
+                string physicalPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imageExisting.Url.TrimStart('/'));
 
                 try
                 {
-                    _imageRepository.DeleteImage(imageExisting);
+                    _imageRepository.Remove(imageExisting);
                 }
                 catch(Exception ex)
                 {

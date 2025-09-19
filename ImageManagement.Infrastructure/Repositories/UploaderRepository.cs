@@ -6,22 +6,22 @@ namespace ImageManagement.Infrastructure.Repositories
 {
     public class UploaderRepository : IUploaderRepository
     {
-        private readonly ImageDbContext _context;
+        private readonly AppDbContext _context;
 
-        public UploaderRepository(ImageDbContext context)
+        public UploaderRepository(AppDbContext context)
         {
             _context = context;
         }
 
         public IUnitOfWork UnitOfWork => _context;
 
-        public Uploader AddUploader(Uploader uploader)
+        public Uploader Add(Uploader uploader)
         {
             _context.Add(uploader);
             return uploader;
         }
 
-        public async Task<(IEnumerable<Uploader>, int TotalCount)> GetPagedUploaderAsync(int pageIndex, int pageSize, bool isDescending, string keyword)
+        public async Task<(IEnumerable<Uploader>, int TotalCount)> GetPagedAsync(int pageIndex, int pageSize, bool isDescending, string keyword)
         {
             var query = _context.Uploaders.AsQueryable();
 
@@ -42,7 +42,7 @@ namespace ImageManagement.Infrastructure.Repositories
             return (item, count);
         }
 
-        public async Task<Uploader?> GetUploaderByIdAsync(int id)
+        public async Task<Uploader?> GetByIdAsync(int id)
         {
             return await _context.Uploaders.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
         }

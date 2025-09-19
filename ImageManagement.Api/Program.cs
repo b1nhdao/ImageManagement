@@ -25,7 +25,7 @@ if (app.Environment.IsDevelopment())
 
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<ImageDbContext>();
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     try
     {
         context.Database.Migrate();

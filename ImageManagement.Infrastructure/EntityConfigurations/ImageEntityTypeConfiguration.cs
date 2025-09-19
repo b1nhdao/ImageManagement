@@ -12,8 +12,8 @@ namespace ImageManagement.Infrastructure.EntityConfigurations
             builder.ToTable("images");
             builder.HasKey(i => i.Id);
 
-            builder.Property(i => i.ImageName);
-            builder.Property(i => i.ImageUrl).IsRequired();
+            builder.Property(i => i.Name);
+            builder.Property(i => i.Url).IsRequired();
             builder.Property(i => i.UploadedTime);
             builder.OwnsOne(i => i.Demension);
 

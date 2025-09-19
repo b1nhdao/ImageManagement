@@ -1,17 +1,8 @@
-﻿using ImageManagement.Domain.SeedWork;
+﻿using ImageManagement.Domain.AggregatesModel.FileBaseAggregate;
 
 namespace ImageManagement.Domain.AggregatesModel.ImageAggregate
 {
-    public interface IImageRepository : IRepository
+    public interface IImageRepository : IBaseFileRepository<Image>
     {
-        Image UploadImage(Image image);
-        Task<Image?> GetImageByIdAsync(Guid id);
-        IEnumerable<Image> UploadMultipleImages(IEnumerable<Image> images);
-        Task<IEnumerable<Image>> GetAllImagesAsync();
-        Task<(IEnumerable<Image>, int TotalCount)> GetPagedImagesAsync(int pageIndex, int pageSize, bool isDescending);
-        Task<(IEnumerable<Image>, int TotalCount)> GetPagedImagesByUploaderIdAsync(int uploaderId, int pageIndex, int pageSize, bool isDescending);
-        void DeleteImage(Image image);
-        void DeleteMultipleImages(IEnumerable<Image> images);
-        Task<IEnumerable<Image>> GetImagesByListIds(IEnumerable<Guid> ids);
     }
 }

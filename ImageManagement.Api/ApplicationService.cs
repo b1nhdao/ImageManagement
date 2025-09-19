@@ -1,4 +1,5 @@
 ﻿using ImageManagement.Api.Services;
+using ImageManagement.Domain.AggregatesModel.FileBaseAggregate;
 using ImageManagement.Domain.AggregatesModel.ImageAggregate;
 using ImageManagement.Domain.AggregatesModel.UploaderAggregate;
 using ImageManagement.Infrastructure;
@@ -11,7 +12,7 @@ namespace ImageManagement.Api
     {
         public static IHostApplicationBuilder AddApplicationService (this IHostApplicationBuilder builder)
         {
-            builder.Services.AddDbContext<ImageDbContext>(options =>
+            builder.Services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
             });

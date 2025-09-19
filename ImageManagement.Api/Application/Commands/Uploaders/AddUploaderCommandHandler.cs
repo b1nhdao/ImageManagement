@@ -16,7 +16,7 @@ namespace ImageManagement.Api.Application.Commands.Uploaders
         {
             var uploader = new Uploader(request.Uploader.UserName);
 
-            uploader = _uploaderRepository.AddUploader(request.Uploader);
+            uploader = _uploaderRepository.Add(request.Uploader);
 
             await _uploaderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 

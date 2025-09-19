@@ -4,8 +4,8 @@ namespace ImageManagement.Domain.AggregatesModel.UploaderAggregate
 {
     public interface IUploaderRepository : IRepository
     {
-        Uploader AddUploader (Uploader uploader);
-        Task<(IEnumerable<Uploader>, int TotalCount)> GetPagedUploaderAsync(int pageIndex, int pageSize, bool isDescending, string keyword);
-        Task<Uploader?> GetUploaderByIdAsync(int id);
+        Uploader Add (Uploader uploader);
+        Task<(IEnumerable<Uploader>, int TotalCount)> GetPagedAsync(int pageIndex, int pageSize, bool isDescending, string keyword);
+        Task<Uploader?> GetByIdAsync(int id);
     }
 }

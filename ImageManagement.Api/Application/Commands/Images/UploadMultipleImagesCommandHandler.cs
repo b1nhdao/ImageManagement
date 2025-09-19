@@ -33,7 +33,7 @@ namespace ImageManagement.Api.Application.Commands.Images
 
                 images.Add(image);
             }
-            _imageRepository.UploadMultipleImages(images);
+            _imageRepository.AddRange(images);
             await _imageRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
             return images;
         }

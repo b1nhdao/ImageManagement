@@ -28,7 +28,7 @@ namespace ImageManagement.Api.Application.Commands.Images
                 request.UploaderId
             );
 
-            _imageRepository.UploadImage(image);
+            _imageRepository.Add(image);
             await _imageRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
             return image;

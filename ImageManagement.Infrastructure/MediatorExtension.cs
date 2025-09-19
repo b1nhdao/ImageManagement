@@ -5,7 +5,7 @@ namespace ImageManagement.Infrastructure
 {
     static class MediatorExtension
     {
-        public static async Task DispatchDomainEventsAsync(this IMediator mediator, ImageDbContext ctx)
+        public static async Task DispatchDomainEventsAsync(this IMediator mediator, AppDbContext ctx)
         {
             var domainEntities = ctx.ChangeTracker
                 .Entries<Entity>()

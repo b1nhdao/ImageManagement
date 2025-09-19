@@ -1,4 +1,5 @@
-﻿using ImageManagement.Domain.AggregatesModel.ImageAggregate;
+﻿using ImageManagement.Domain.AggregatesModel.FileBaseAggregate;
+using ImageManagement.Domain.AggregatesModel.ImageAggregate;
 using MediatR;
 
 namespace ImageManagement.Api.Application.Commands.Images
@@ -16,18 +17,18 @@ namespace ImageManagement.Api.Application.Commands.Images
         {
             try
             {
-                var images = await _imageRepository.GetImagesByListIds(request.Ids);
+                var images = await _imageRepository.GetByIdsAsync(request.Ids);
 
                 if(!images.Any())
                 {
                     throw new Exception("Not Found");
                 }
 
-                _imageRepository.DeleteMultipleImages(images);
+                _imageRepository.RemoveRange(images);
                 
                 foreach (var item in images)
                 {
-                    string physicalPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", item.ImageUrl.TrimStart('/'));
+                    string physicalPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", item.Url.TrimStart('/'));
 
                     if (File.Exists(physicalPath))
                     {

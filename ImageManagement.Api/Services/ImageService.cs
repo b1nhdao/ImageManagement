@@ -1,7 +1,7 @@
-﻿using System.Security.Cryptography;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using ImageManagement.Api.Models.ImageModels;
 using ImageManagement.Domain.AggregatesModel.ImageAggregate;
+using ImageManagement.Domain.FolderType;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace ImageManagement.Api.Services
@@ -51,7 +51,6 @@ namespace ImageManagement.Api.Services
                     throw new InvalidOperationException($"Failed to upload file '{file?.FileName}': {ex.Message}", ex);
                 }
             }
-
             return results;
         }
 
@@ -134,6 +133,7 @@ namespace ImageManagement.Api.Services
         {
             await using var readStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var image = await SixLabors.ImageSharp.Image.LoadAsync<Rgba32>(readStream, cancellationToken);
+            
             return new ImageDemensions(image.Height, image.Width);
         }
 

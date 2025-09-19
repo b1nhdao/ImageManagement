@@ -1,4 +1,4 @@
-﻿namespace ImageManagement.Domain.AggregatesModel.ImageAggregate
+﻿namespace ImageManagement.Domain.FolderType
 {
     public class OtherFolder : BaseFolder
     {

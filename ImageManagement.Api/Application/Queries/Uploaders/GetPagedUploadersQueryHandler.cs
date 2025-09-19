@@ -21,7 +21,7 @@ namespace ImageManagement.Api.Application.Queries.Uploaders
             bool isDescending = request.PaginationRequest.IsDescending;
             string keyWord = request.PaginationRequest.KeyWord.ToUnsign();
 
-            var (items, totalCount) = await _uploaderRepository.GetPagedUploaderAsync(pageIndex, pageSize, isDescending, keyWord);
+            var (items, totalCount) = await _uploaderRepository.GetPagedAsync(pageIndex, pageSize, isDescending, keyWord);
 
             return new PaginationResponse<Uploader>(pageIndex, pageSize, totalCount, items);
         }
