@@ -2,7 +2,6 @@
 using ImageManagement.Api.Application.Queries.Images;
 using ImageManagement.Api.DTOs;
 using ImageManagement.Api.Models.PaginationModels;
-using ImageManagement.Domain.AggregatesModel.ImageAggregate;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,9 +35,9 @@ namespace ImageManagement.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadImageByType(IFormFile file, [FromForm]Guid uploaderId, [FromForm]string folderTypeKey)
+        public async Task<IActionResult> UploadImageByType([FromForm] AddImageDTO addImageDTO)
         {
-            var command = new UploadImageCommand(file, uploaderId, folderTypeKey);
+            var command = new UploadImageCommand(addImageDTO.File, addImageDTO.UploaderId, addImageDTO.FolderFileKey);
             var result = await _mediator.Send(command);
             if (result is null)
             {
@@ -49,9 +48,9 @@ namespace ImageManagement.Api.Controllers
 
         [HttpPost]
         [Route("multiple")]
-        public async Task<IActionResult> UploadMultipleImages(IEnumerable<IFormFile> files, [FromForm]Guid uploaderId, [FromForm]string folderTypeKey)
+        public async Task<IActionResult> UploadMultipleImages([FromForm] AddImagesDTO addImagesDTO)
         {
-            var command = new UploadMultipleImagesCommand(files, uploaderId, folderTypeKey);
+            var command = new UploadMultipleImagesCommand(addImagesDTO.Files, addImagesDTO.UploaderId, addImagesDTO.FolderFileKey);
             var result = await _mediator.Send(command);
             if (result is null)
             {
@@ -69,20 +68,17 @@ namespace ImageManagement.Api.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteImage(ImageDeleteDTO imageDeleteDto)
+        public async Task<IActionResult> DeleteImage(Guid id)
         {
-            var image = Image.GetImage(imageDeleteDto.Id, imageDeleteDto.ImageUrl, imageDeleteDto.ImageUrl, imageDeleteDto.Size, imageDeleteDto.UploadedTime, imageDeleteDto.UploaderId);
-
-            var command = new DeleteImageCommand(image);
+            var command = new DeleteImageCommand(id);
             return await _mediator.Send(command) ? Ok() : BadRequest();
         }
 
         [HttpDelete]
         [Route("multiple")]
-        public async Task<IActionResult> DeleteMultipleImages(IEnumerable<ImageDeleteDTO> imageDeleteDTOs)
+        public async Task<IActionResult> DeleteMultipleImages(IEnumerable<Guid> ids)
         {
-            var images = imageDeleteDTOs.Select(imageDeleteDto => Image.GetImage(imageDeleteDto.Id, imageDeleteDto.ImageUrl, imageDeleteDto.ImageUrl, imageDeleteDto.Size, imageDeleteDto.UploadedTime, imageDeleteDto.UploaderId)).ToList();
-            var command = new DeleteMultipleImagesCommand(images);
+            var command = new DeleteMultipleImagesCommand(ids);
             return await _mediator.Send(command) ? Ok() : BadRequest();
         }
     }

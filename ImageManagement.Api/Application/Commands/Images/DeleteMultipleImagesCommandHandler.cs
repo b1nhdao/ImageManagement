@@ -16,9 +16,16 @@ namespace ImageManagement.Api.Application.Commands.Images
         {
             try
             {
-                _imageRepository.DeleteMultipleImages(request.Images);
+                var images = await _imageRepository.GetImagesByListIds(request.Ids);
+
+                if(images.Any())
+                {
+                    throw new Exception("Not Found");
+                }
+
+                _imageRepository.DeleteMultipleImages(images);
                 
-                foreach (var item in request.Images)
+                foreach (var item in images)
                 {
                     string physicalPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", item.ImageUrl.TrimStart('/'));
 

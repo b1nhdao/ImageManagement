@@ -1,14 +1,13 @@
-﻿using ImageManagement.Domain.AggregatesModel.ImageAggregate;
-using MediatR;
+﻿using MediatR;
 
 namespace ImageManagement.Api.Application.Commands.Images
 {
     public class DeleteMultipleImagesCommand : IRequest<bool>
     {
-        public IEnumerable<Image> Images { get; set; }
-        public DeleteMultipleImagesCommand(IEnumerable<Image> images)
+        public IEnumerable<Guid> Ids { get; set; }
+        public DeleteMultipleImagesCommand(IEnumerable<Guid> ids)
         {
-            Images = images;
+            Ids = ids;
         }
     }
 }

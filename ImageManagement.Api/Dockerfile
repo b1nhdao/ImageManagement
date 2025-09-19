@@ -2,7 +2,8 @@
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-RUN mkdir -p wwwroot/uploads/images && chown -R app:app wwwroot/uploads/images
+RUN mkdir -p /app/wwwroot/uploads && \
+    chown -R ${APP_UID}:${APP_UID} /app/wwwroot
 USER $APP_UID
 WORKDIR /app
 EXPOSE 8080

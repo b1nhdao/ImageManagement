@@ -67,7 +67,6 @@ namespace ImageManagement.Infrastructure.Repositories
         public void DeleteImage(Image image)
         {
             _context.Images.Remove(image);
-
         }
 
         public IEnumerable<Image> UploadMultipleImages(IEnumerable<Image> images)
@@ -79,6 +78,11 @@ namespace ImageManagement.Infrastructure.Repositories
         public void DeleteMultipleImages(IEnumerable<Image> images)
         {
             _context.Images.RemoveRange(images);
+        }
+
+        public async Task<IEnumerable<Image>> GetImagesByListIds(IEnumerable<Guid> ids)
+        {
+            return await _context.Images.Where(i => ids.Contains(i.Id)).ToListAsync();
         }
     }
 }

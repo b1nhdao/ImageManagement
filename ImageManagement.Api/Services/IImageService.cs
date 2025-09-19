@@ -6,5 +6,7 @@ namespace ImageManagement.Api.Services
     {
         Task<ImageUploadResult> UploadAsync(IFormFile file, Guid uploaderId, string folderTypeKey, CancellationToken cancellationToken = default);
         Task<IEnumerable<ImageUploadResult>> UploadMultipleAsync(IEnumerable<IFormFile> files, Guid uploaderId, string folderTypeKey, CancellationToken cancellationToken = default);
+        Task DeleteAsync(string path, CancellationToken cancellationToken = default);
+        Task DeleteMultipleAsync(IEnumerable<string> paths, CancellationToken cancellationToken = default);
     }
 }

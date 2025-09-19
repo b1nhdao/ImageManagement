@@ -27,15 +27,23 @@ namespace ImageManagement.Api.Services
             var results = new List<ImageUploadResult>();
             var folder = FolderFactory.CreateFolder(folderTypeKey);
 
+            var uploadedPath = new List<string>();
+
             foreach (var file in fileList)
             {
                 try
                 {
                     var imageUploadResult = await ConstructImageUploadResult(file, folder, cancellationToken);
                     results.Add(imageUploadResult);
+                    uploadedPath.Add(imageUploadResult.RelativeUrl);
                 }
                 catch (Exception ex)
                 {
+                    if (uploadedPath.Any())
+                    {
+                        await DeleteMultipleAsync(uploadedPath, cancellationToken);
+                    }
+
                     throw new InvalidOperationException($"Failed to upload file '{file?.FileName}': {ex.Message}", ex);
                 }
             }
@@ -52,6 +60,25 @@ namespace ImageManagement.Api.Services
         private static IFormFile ValidateFile(IFormFile file)
         {
             return file ?? throw new ArgumentNullException(nameof(file), "File cannot be null");
+        }
+
+        public async Task DeleteMultipleAsync(IEnumerable<string> paths, CancellationToken cancellationToken)
+        {
+            foreach(var path in paths)
+            {
+                if (File.Exists(path))
+                {
+                    await Task.Run(() => File.Delete(path), cancellationToken);
+                }
+            }
+        }
+
+        public async Task DeleteAsync(string path, CancellationToken cancellationToken)
+        {
+            if (File.Exists(path))
+            {
+                await Task.Run(() => File.Delete(path), cancellationToken);
+            }
         }
 
         private static string GetValidatedExtension(IFormFile file)
