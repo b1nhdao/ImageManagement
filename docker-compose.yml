@@ -16,6 +16,7 @@ services:
     container_name: image_management
     ports:
       - "8080:8080" 
+      - "8081:8081"
     build:
       context: .
       dockerfile: ImageManagement.Api/Dockerfile

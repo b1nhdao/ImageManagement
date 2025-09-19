@@ -13,11 +13,5 @@
             TargetFolder = CreateLocation();
             Description = description;
         }
-
-        //protected BaseFolder(string name)
-        //{
-        //    Name = name;
-        //    TargetFolder = CreateLocation();
-        //}
     }
 }

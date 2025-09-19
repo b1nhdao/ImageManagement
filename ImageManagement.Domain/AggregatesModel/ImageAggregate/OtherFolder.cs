@@ -11,7 +11,7 @@
         public override string CreateLocation()
         {
             var now = DateTime.Now;
-            return $"{now.Year}-{now.Month:D2}-{FOLDER_TYPE}";
+            return $"{now.Year}/{now.Month:D2}/{FOLDER_TYPE}";
         }
     }
 }

@@ -2,6 +2,7 @@
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+RUN mkdir -p wwwroot/uploads/images && chown -R app:app wwwroot/uploads/images
 USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
@@ -28,6 +29,5 @@ RUN dotnet publish "./ImageManagement.Api.csproj" -c $BUILD_CONFIGURATION -o /ap
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
-RUN mkdir -p wwwroot/uploads/images && chown -R app:app wwwroot/uploads/images
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "ImageManagement.Api.dll"]

@@ -23,7 +23,7 @@ namespace ImageManagement.Api
 
             builder.Services.AddScoped<IImageRepository, ImageRepository>();
             builder.Services.AddScoped<IUploaderRepository, UploaderRepository>();
-            builder.Services.AddScoped<IImageServiceTest, ImageServiceTest>();
+            builder.Services.AddScoped<IImageService, ImageService>();
 
             builder.Services.AddScoped<IImageService, ImageService>();
 

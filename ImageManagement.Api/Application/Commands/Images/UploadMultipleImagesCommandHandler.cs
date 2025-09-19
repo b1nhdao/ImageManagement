@@ -7,9 +7,9 @@ namespace ImageManagement.Api.Application.Commands.Images
     public class UploadMultipleImagesCommandHandler : IRequestHandler<UploadMultipleImagesCommand, IEnumerable<Image>>
     {
         private readonly IImageRepository _imageRepository;
-        private readonly IImageServiceTest _imageService;
+        private readonly IImageService _imageService;
 
-        public UploadMultipleImagesCommandHandler(IImageRepository imageRepository, IImageServiceTest imageService)
+        public UploadMultipleImagesCommandHandler(IImageRepository imageRepository, IImageService imageService)
         {
             _imageRepository = imageRepository;
             _imageService = imageService;

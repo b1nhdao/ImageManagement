@@ -1,16 +1,13 @@
-﻿
-using System.Text.RegularExpressions;
-using System.Threading;
+﻿using System.Text.RegularExpressions;
 using ImageManagement.Api.Models.ImageModels;
 using ImageManagement.Domain.AggregatesModel.ImageAggregate;
-using MediatR;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace ImageManagement.Api.Services
 {
     public class ImageService : IImageService
     {
-        private static readonly string[] ImageExtensions = [".jpg", ".jpeg", ".png", ".webp", ".gif"];
+        private static readonly string[] AllowedExtensions = [".jpg", ".jpeg", ".png"];
         private readonly IWebHostEnvironment _env;
 
         public ImageService(IWebHostEnvironment env)
@@ -18,7 +15,7 @@ namespace ImageManagement.Api.Services
             _env = env;
         }
 
-        public async Task<IEnumerable<ImageUploadResult>> UploadMultipleAsync(IEnumerable<IFormFile> files, Guid uploaderId, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<ImageUploadResult>> UploadMultipleAsync(IEnumerable<IFormFile> files, Guid uploaderId, string folderTypeKey, CancellationToken cancellationToken = default)
         {
             if (files == null)
                 throw new ArgumentNullException(nameof(files), "Files collection cannot be null");
@@ -28,14 +25,13 @@ namespace ImageManagement.Api.Services
                 return [];
 
             var results = new List<ImageUploadResult>();
-            var uploadDirectory = CreateUploadDirectory();
+            var folder = FolderFactory.CreateFolder(folderTypeKey);
 
             foreach (var file in fileList)
             {
                 try
                 {
-                    var imageUploadResult = await ConstructImageUploadResult(file, cancellationToken);
-
+                    var imageUploadResult = await ConstructImageUploadResult(file, folder, cancellationToken);
                     results.Add(imageUploadResult);
                 }
                 catch (Exception ex)
@@ -47,9 +43,10 @@ namespace ImageManagement.Api.Services
             return results;
         }
 
-        public async Task<ImageUploadResult> UploadAsync(IFormFile file, Guid uploaderId, CancellationToken cancellationToken = default)
+        public async Task<ImageUploadResult> UploadAsync(IFormFile file, Guid uploaderId, string folderTypeKey, CancellationToken cancellationToken = default)
         {
-            return await ConstructImageUploadResult(file, cancellationToken);
+            var folder = FolderFactory.CreateFolder(folderTypeKey);
+            return await ConstructImageUploadResult(file, folder, cancellationToken);
         }
 
         private static IFormFile ValidateFile(IFormFile file)
@@ -60,18 +57,18 @@ namespace ImageManagement.Api.Services
         private static string GetValidatedExtension(IFormFile file)
         {
             var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
-            if (!ImageExtensions.Contains(extension))
+            if (!AllowedExtensions.Contains(extension))
             {
                 throw new NotSupportedException($"Unsupported file extension: {extension}. " +
-                    $"Allowed extensions: {string.Join(", ", ImageExtensions)}");
+                    $"Allowed extensions: {string.Join(", ", AllowedExtensions)}");
             }
             return extension;
         }
 
-        private string CreateUploadDirectory()
+        private string CreateUploadDirectory(BaseFolder folder)
         {
             var webRoot = _env.WebRootPath ?? Path.Combine(_env.ContentRootPath, "wwwroot");
-            var uploadDirectory = Path.Combine(webRoot, "uploads", "images");
+            var uploadDirectory = Path.Combine(webRoot, "uploads", "images", folder.TargetFolder);
             Directory.CreateDirectory(uploadDirectory);
             return uploadDirectory;
         }
@@ -107,19 +104,19 @@ namespace ImageManagement.Api.Services
             return new ImageSize(image.Height, image.Width);
         }
 
-        private async Task<ImageUploadResult> ConstructImageUploadResult(IFormFile file, CancellationToken cancellationToken)
+        private async Task<ImageUploadResult> ConstructImageUploadResult(IFormFile file, BaseFolder folder, CancellationToken cancellationToken)
         {
             var validFile = ValidateFile(file);
             var fileExtension = GetValidatedExtension(validFile);
 
-            var uploadDirectory = CreateUploadDirectory();
+            var uploadDirectory = CreateUploadDirectory(folder);
             var generatedFileName = GenerateFileName(validFile.FileName, fileExtension);
             var fullPath = Path.Combine(uploadDirectory, generatedFileName);
 
             await SaveFileAsync(validFile, fullPath, cancellationToken);
             var imageSize = await GetImageDimensionsAsync(fullPath, cancellationToken);
 
-            var relativeUrl = $"/uploads/images/{generatedFileName}";
+            var relativeUrl = $"/uploads/images/{folder.TargetFolder}/{generatedFileName}";
 
             return new ImageUploadResult(
                 relativeUrl,
