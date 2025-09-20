@@ -41,7 +41,7 @@ namespace ImageManagement.Api.Application.Commands.Documents
                 return Result.Error($"Error when saving files: please try again");
             }
 
-            var document = new Document(result.RelativeUrl, result.OriginalFileName, result.Size, DateTime.UtcNow, request.UploaderId, Guid.NewGuid());
+            var document = new Document(result.RelativeUrl, result.OriginalFileName, result.Size, DateTime.UtcNow, request.UploaderId);
 
             try
             {

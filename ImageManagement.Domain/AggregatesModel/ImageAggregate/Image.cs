@@ -8,8 +8,8 @@ namespace ImageManagement.Domain.AggregatesModel.ImageAggregate
     {
         public ImageDemensions Demension { get; private set; }
 
-        public Image(string imageUrl, string imageName, ImageDemensions imageDemension, long size, DateTime uploadedTime, int uploaderId, Guid folderTypeId)
-            : base(imageUrl, imageName, size, uploadedTime, uploaderId, folderTypeId)
+        public Image(string imageUrl, string imageName, ImageDemensions imageDemension, long size, DateTime uploadedTime, int uploaderId)
+            : base(imageUrl, imageName, size, uploadedTime, uploaderId)
         {
             Id = Guid.NewGuid();
             Demension = imageDemension;

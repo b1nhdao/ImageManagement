@@ -1,7 +1,6 @@
-﻿using ImageManagement.Domain.AggregatesModel.FileTypeAggregate;
+﻿using System.Text.Json.Serialization;
 using ImageManagement.Domain.AggregatesModel.UploaderAggregate;
 using ImageManagement.Domain.SeedWork;
-using System.Text.Json.Serialization;
 
 namespace ImageManagement.Domain.FileBase
 {
@@ -12,20 +11,16 @@ namespace ImageManagement.Domain.FileBase
         public long Size { get; private set; } // in KB
         public DateTime UploadedTime { get; private set; }
         public int UploaderId { get; private set; }
-        public Guid FolderTypeId { get; private set; }
         [JsonIgnore]
         public Uploader Uploader { get; }
-        [JsonIgnore]
-        public FileType FileType { get; private set; }
 
-        public BaseFile(string url, string name, long size, DateTime uploadedTime, int uploaderId, Guid fileTypeId)
+        public BaseFile(string url, string name, long size, DateTime uploadedTime, int uploaderId)
         {
             Url = url;
             Name = name;
             Size = size;
             UploadedTime = uploadedTime;
             UploaderId = uploaderId;
-            FolderTypeId = fileTypeId;
         }
 
         public BaseFile()

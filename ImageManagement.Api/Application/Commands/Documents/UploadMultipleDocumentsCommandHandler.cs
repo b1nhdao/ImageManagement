@@ -39,8 +39,7 @@ namespace ImageManagement.Api.Application.Commands.Documents
                     result.OriginalFileName,
                     result.Size,
                     DateTime.UtcNow,
-                    request.UploaderId,
-                    Guid.NewGuid()
+                    request.UploaderId
                 );
 
                 images.Add(image);
