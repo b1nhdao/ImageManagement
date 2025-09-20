@@ -25,7 +25,8 @@ namespace ImageManagement.Api.Application.Commands.Images
                 result.Demensions,
                 result.Size,
                 DateTime.UtcNow,
-                request.UploaderId
+                request.UploaderId,
+                Guid.NewGuid()
             );
 
             _imageRepository.Add(image);

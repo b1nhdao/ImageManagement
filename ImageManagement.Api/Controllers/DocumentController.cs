@@ -1,7 +1,5 @@
 ﻿using ImageManagement.Api.Application.Commands.Documents;
-using ImageManagement.Api.Application.Commands.Images;
 using ImageManagement.Api.Application.Queries.Documents;
-using ImageManagement.Api.Application.Queries.Images;
 using ImageManagement.Api.DTOs;
 using ImageManagement.Api.Models.PaginationModels;
 using MediatR;
@@ -24,7 +22,21 @@ namespace ImageManagement.Api.Controllers
         public async Task<IActionResult> GetDocuments([FromQuery] PaginationRequest request)
         {
             var query = new GetPagedDocumentsQuery(request);
-            return Ok(await _mediator.Send(query));
+             var result = await _mediator.Send(query);
+
+            if (result.Status == Ardalis.Result.ResultStatus.NotFound)
+            {
+                return NotFound(result);
+            }
+            if (result.Status == Ardalis.Result.ResultStatus.Error)
+            {
+                return BadRequest(result);
+            }
+            if (result.Status == Ardalis.Result.ResultStatus.Ok)
+            {
+                return Ok(result);
+            }
+            return BadRequest();
         }
 
         [HttpGet]
@@ -33,11 +45,19 @@ namespace ImageManagement.Api.Controllers
         {
             var query = new GetDocumentByIdQuery(id);
             var result = await _mediator.Send(query);
-            if (result is null)
+            if (result.Status == Ardalis.Result.ResultStatus.NotFound)
             {
-                return NotFound();
+                return NotFound(result);
             }
-            return Ok(result);
+            if (result.Status == Ardalis.Result.ResultStatus.Error)
+            {
+                return BadRequest(result);
+            }
+            if (result.Status == Ardalis.Result.ResultStatus.Ok)
+            {
+                return Ok(result);
+            }
+            return BadRequest();
         }
 
         [HttpGet]
@@ -45,7 +65,21 @@ namespace ImageManagement.Api.Controllers
         public async Task<IActionResult> GetDocumentsByUploaderId(int id, [FromQuery] PaginationRequest paginationRequest)
         {
             var query = new GetPagedDocumentsByUploaderIdQuery(id, paginationRequest);
-            return Ok(await _mediator.Send(query));
+            var result = await _mediator.Send(query);
+
+            if (result.Status == Ardalis.Result.ResultStatus.NotFound)
+            {
+                return NotFound(result);
+            }
+            if (result.Status == Ardalis.Result.ResultStatus.Error)
+            {
+                return BadRequest(result);
+            }
+            if (result.Status == Ardalis.Result.ResultStatus.Ok)
+            {
+                return Ok(result);
+            }
+            return BadRequest();
         }
 
         [HttpPost]
@@ -53,11 +87,19 @@ namespace ImageManagement.Api.Controllers
         {
             var command = new UploadDocumentCommand(addDocumentDTO.File, addDocumentDTO.UploaderId, addDocumentDTO.FolderFileKey);
             var result = await _mediator.Send(command);
-            if (result is null)
+            if (result.Status == Ardalis.Result.ResultStatus.NotFound)
             {
-                return BadRequest("Upload failed");
+                return NotFound(result);
             }
-            return Ok(result);
+            if (result.Status == Ardalis.Result.ResultStatus.Error)
+            {
+                return BadRequest(result);
+            }
+            if (result.Status == Ardalis.Result.ResultStatus.Ok)
+            {
+                return Ok(result);
+            }
+            return BadRequest();
         }
 
         [HttpDelete]
@@ -65,7 +107,21 @@ namespace ImageManagement.Api.Controllers
         public async Task<IActionResult> DeleteDocument(Guid id)
         {
             var command = new DeleteDocumentCommand(id);
-            return await _mediator.Send(command) ? Ok() : BadRequest();
+            var result = await _mediator.Send(command);
+
+            if(result.Status == Ardalis.Result.ResultStatus.NotFound)
+            {
+                return NotFound(result);
+            }
+            if(result.Status == Ardalis.Result.ResultStatus.Error)
+            {
+                return BadRequest(result);
+            }
+            if(result.Status == Ardalis.Result.ResultStatus.Ok)
+            {
+                return Ok(result);
+            }
+            return BadRequest();
         }
 
         [HttpPost]
@@ -74,11 +130,20 @@ namespace ImageManagement.Api.Controllers
         {
             var command = new UploadMultipleDocumentsCommand(addDocumentsDTO.Files, addDocumentsDTO.UploaderId, addDocumentsDTO.FolderFileKey);
             var result = await _mediator.Send(command);
-            if (result is null)
+
+            if (result.Status == Ardalis.Result.ResultStatus.NotFound)
             {
-                return BadRequest();
+                return NotFound(result);
             }
-            return Ok(result);
+            if (result.Status == Ardalis.Result.ResultStatus.Error)
+            {
+                return BadRequest(result);
+            }
+            if (result.Status == Ardalis.Result.ResultStatus.Ok)
+            {
+                return Ok(result);
+            }
+            return BadRequest();
         }
 
         [HttpDelete]
@@ -86,7 +151,21 @@ namespace ImageManagement.Api.Controllers
         public async Task<IActionResult> DeleteMultipleDocuments(IEnumerable<Guid> ids)
         {
             var command = new DeleteMultipleDocumentsCommand(ids);
-            return await _mediator.Send(command) ? Ok() : BadRequest();
+            var result = await _mediator.Send(command);
+
+            if (result.Status == Ardalis.Result.ResultStatus.NotFound)
+            {
+                return NotFound(result);
+            }
+            if (result.Status == Ardalis.Result.ResultStatus.Error)
+            {
+                return BadRequest(result);
+            }
+            if (result.Status == Ardalis.Result.ResultStatus.Ok)
+            {
+                return Ok(result);
+            }
+            return BadRequest();
         }
     }
 }

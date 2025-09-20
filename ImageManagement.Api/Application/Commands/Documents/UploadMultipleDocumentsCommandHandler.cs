@@ -1,11 +1,12 @@
-﻿using ImageManagement.Api.Services;
+﻿using Ardalis.Result;
+using ImageManagement.Api.Models.FileModels;
 using ImageManagement.Api.Services.Interfaces;
 using ImageManagement.Domain.AggregatesModel.DocumentAggregate;
 using MediatR;
 
 namespace ImageManagement.Api.Application.Commands.Documents
 {
-    public class UploadMultipleDocumentsCommandHandler : IRequestHandler<UploadMultipleDocumentsCommand, IEnumerable<Document>>
+    public class UploadMultipleDocumentsCommandHandler : IRequestHandler<UploadMultipleDocumentsCommand, Result<List<Document>>>
     {
         private readonly IDocumentRepository _documentRepository;
         private readonly IDocumentService _documentService;
@@ -16,9 +17,19 @@ namespace ImageManagement.Api.Application.Commands.Documents
             _documentService = documentService;
         }
 
-        public async Task<IEnumerable<Document>> Handle(UploadMultipleDocumentsCommand request, CancellationToken cancellationToken)
+        public async Task<Result<List<Document>>> Handle(UploadMultipleDocumentsCommand request, CancellationToken cancellationToken)
         {
-            var results = await _documentService.UploadMultipleDocumentsAsync(request.Documents, request.UploaderId, request.FolderTypeKey, cancellationToken);
+            IEnumerable<DocumentUploadResult> results;
+
+            try
+            {
+                results = await _documentService.UploadMultipleDocumentsAsync(request.Documents, request.UploaderId, request.FolderTypeKey, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                return Result.Error($"Error when saving files: " + ex);
+            }
+
             var images = new List<Document>();
 
             foreach (var result in results)
@@ -28,14 +39,23 @@ namespace ImageManagement.Api.Application.Commands.Documents
                     result.OriginalFileName,
                     result.Size,
                     DateTime.UtcNow,
-                    request.UploaderId
+                    request.UploaderId,
+                    Guid.NewGuid()
                 );
 
                 images.Add(image);
             }
-            _documentRepository.AddRange(images);
+
+            try
+            {
+                _documentRepository.AddRange(images);
+            }
+            catch (Exception ex)
+            {
+                return Result.Error("Error when procesing with database: " + ex);
+            }
             await _documentRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
-            return images;
+            return Result.Success(images, "Documents uploaded successfully");
         }
     }
 }

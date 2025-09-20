@@ -1,5 +1,5 @@
-﻿using ImageManagement.Domain.AggregatesModel.FileBaseAggregate;
-using ImageManagement.Domain.DomainEvents;
+﻿using ImageManagement.Domain.DomainEvents;
+using ImageManagement.Domain.FileBase;
 using ImageManagement.Domain.SeedWork;
 
 namespace ImageManagement.Domain.AggregatesModel.ImageAggregate
@@ -8,8 +8,8 @@ namespace ImageManagement.Domain.AggregatesModel.ImageAggregate
     {
         public ImageDemensions Demension { get; private set; }
 
-        public Image(string imageUrl, string imageName, ImageDemensions imageDemension, long size, DateTime uploadedTime, int uploaderId)
-            : base(imageUrl, imageName, size, uploadedTime, uploaderId)
+        public Image(string imageUrl, string imageName, ImageDemensions imageDemension, long size, DateTime uploadedTime, int uploaderId, Guid folderTypeId)
+            : base(imageUrl, imageName, size, uploadedTime, uploaderId, folderTypeId)
         {
             Id = Guid.NewGuid();
             Demension = imageDemension;

@@ -1,10 +1,10 @@
 ﻿namespace ImageManagement.Domain.FolderType
 {
-    public class OtherFolder : BaseFolder
+    public class ChiFolderType : BaseFolderType
     {
-        private const string FOLDER_TYPE = "other";
+        public const string FOLDER_TYPE = "chi";
 
-        public OtherFolder(string name, string description) : base(name, description)
+        public ChiFolderType(string name, string description) : base(name, description)
         {
         }
 

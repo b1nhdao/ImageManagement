@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using Ardalis.Result;
+using MediatR;
 
 namespace ImageManagement.Api.Application.Commands.Documents
 {
-    public class DeleteDocumentCommand : IRequest<bool>
+    public class DeleteDocumentCommand : IRequest<Result>
     {
         public Guid Id { get; set; }
 

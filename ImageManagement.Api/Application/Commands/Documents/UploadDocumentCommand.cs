@@ -1,9 +1,10 @@
-﻿using ImageManagement.Domain.AggregatesModel.DocumentAggregate;
+﻿using Ardalis.Result;
+using ImageManagement.Domain.AggregatesModel.DocumentAggregate;
 using MediatR;
 
 namespace ImageManagement.Api.Application.Commands.Documents
 {
-    public class UploadDocumentCommand : IRequest<Document>
+    public class UploadDocumentCommand : IRequest<Result<Document>>
     {
         public IFormFile File { get; set; }
         public int UploaderId { get; set; }

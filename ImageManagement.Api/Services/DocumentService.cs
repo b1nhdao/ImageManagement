@@ -23,7 +23,7 @@ namespace ImageManagement.Api.Services
                 return [];
 
             var results = new List<DocumentUploadResult>();
-            var folder = FolderFactory.CreateFolder(folderTypeKey);
+            var folder = FolderTypeFactory.CreateFolder(folderTypeKey);
 
             var uploadedPath = new List<string>();
 
@@ -51,7 +51,7 @@ namespace ImageManagement.Api.Services
 
         public async Task<DocumentUploadResult> UploadDocumentAsync(IFormFile file, int uploaderId, string folderTypeKey, CancellationToken cancellationToken = default)
         {
-            var folder = FolderFactory.CreateFolder(folderTypeKey);
+            var folder = FolderTypeFactory.CreateFolder(folderTypeKey);
             return await ConstructDocumentUploadResult(file, folder, cancellationToken);
         }
 
@@ -65,7 +65,7 @@ namespace ImageManagement.Api.Services
             await _fileStorageService.DeleteMultipleFilesAsync(paths, cancellationToken);
         }
 
-        private async Task<DocumentUploadResult> ConstructDocumentUploadResult(IFormFile file, BaseFolder folder, CancellationToken cancellationToken)
+        private async Task<DocumentUploadResult> ConstructDocumentUploadResult(IFormFile file, BaseFolderType folder, CancellationToken cancellationToken)
         {
             var validFile = FileValidationService.ValidateFile(file);
             var fileExtension = FileValidationService.GetValidatedDocumentExtension(validFile);

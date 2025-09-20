@@ -1,10 +1,10 @@
 ﻿namespace ImageManagement.Domain.FolderType
 {
-    public class ThuFolder : BaseFolder
+    public class ThuFolderType : BaseFolderType
     {
         public const string FOLDER_TYPE = "thu";
 
-        public ThuFolder(string name, string description) : base(name, description)
+        public ThuFolderType(string name, string description) : base(name, description)
         {
         }
 

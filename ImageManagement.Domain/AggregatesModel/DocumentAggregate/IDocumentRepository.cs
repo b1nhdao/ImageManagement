@@ -1,4 +1,4 @@
-﻿using ImageManagement.Domain.AggregatesModel.FileBaseAggregate;
+﻿using ImageManagement.Domain.FileBase;
 
 namespace ImageManagement.Domain.AggregatesModel.DocumentAggregate
 {

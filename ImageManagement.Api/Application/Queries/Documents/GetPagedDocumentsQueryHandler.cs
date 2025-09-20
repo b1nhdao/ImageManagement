@@ -1,10 +1,11 @@
-﻿using ImageManagement.Api.Models.PaginationModels;
+﻿using Ardalis.Result;
+using ImageManagement.Api.Models.PaginationModels;
 using ImageManagement.Domain.AggregatesModel.DocumentAggregate;
 using MediatR;
 
 namespace ImageManagement.Api.Application.Queries.Documents
 {
-    public class GetPagedDocumentsQueryHandler : IRequestHandler<GetPagedDocumentsQuery, PaginationResponse<Document>>
+    public class GetPagedDocumentsQueryHandler : IRequestHandler<GetPagedDocumentsQuery, Result<PaginationResponse<Document>>>
     {
         private readonly IDocumentRepository _documentRepository;
 
@@ -13,7 +14,7 @@ namespace ImageManagement.Api.Application.Queries.Documents
             _documentRepository = documentRepository;
         }
 
-        public async Task<PaginationResponse<Document>> Handle(GetPagedDocumentsQuery request, CancellationToken cancellationToken)
+        public async Task<Result<PaginationResponse<Document>>> Handle(GetPagedDocumentsQuery request, CancellationToken cancellationToken)
         {
             int pageIndex = request.PaginationRequest.PageIndex;
             int pageSize = request.PaginationRequest.PageSize;
@@ -22,9 +23,16 @@ namespace ImageManagement.Api.Application.Queries.Documents
             DateOnly? fromDate = request.PaginationRequest.FromDate;
             DateOnly? toDate = request.PaginationRequest.ToDate;
 
-            var (item, totalCount) = await _documentRepository.GetPagedAsync(pageIndex, pageSize, isDescending, keyword, fromDate, toDate);
+            try
+            {
+                var (item, totalCount) = await _documentRepository.GetPagedAsync(pageIndex, pageSize, isDescending, keyword, fromDate, toDate);
+                return Result.Success(new PaginationResponse<Document>(pageIndex, pageSize, totalCount, item));
 
-            return new PaginationResponse<Document>(pageIndex, pageSize, totalCount, item);
+            }
+            catch (Exception ex)
+            {
+                return Result.Error("Error when procesing with database: " + ex);
+            }
         }
     }
 }

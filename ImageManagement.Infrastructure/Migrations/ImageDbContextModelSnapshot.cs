@@ -129,7 +129,7 @@ namespace ImageManagement.Infrastructure.Migrations
 
                             b1.HasKey("ImageId");
 
-                            b1.ToTable("images");
+                            b1.ToTable("images", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("ImageId");

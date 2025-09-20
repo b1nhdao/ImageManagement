@@ -15,7 +15,7 @@ namespace ImageManagement.Api.Services
             _configuration = configuration;
         }
 
-        public string CreateUploadDirectory(BaseFolder folder, string fileCategory)
+        public string CreateUploadDirectory(BaseFolderType folder, string fileCategory)
         {
             var webRoot = _env.WebRootPath ?? Path.Combine(_env.ContentRootPath, "wwwroot");
             var uploadDirectory = Path.Combine(webRoot, "uploads", fileCategory, folder.TargetFolder);

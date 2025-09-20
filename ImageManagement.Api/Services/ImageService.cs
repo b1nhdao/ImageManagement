@@ -1,5 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using ImageManagement.Api.Models.ImageModels;
+using ImageManagement.Api.Models.FileModels;
 using ImageManagement.Api.Services.Interfaces;
 using ImageManagement.Domain.AggregatesModel.ImageAggregate;
 using ImageManagement.Domain.FolderType;
@@ -27,7 +27,7 @@ namespace ImageManagement.Api.Services
                 return [];
 
             var results = new List<ImageUploadResult>();
-            var folder = FolderFactory.CreateFolder(folderTypeKey);
+            var folder = FolderTypeFactory.CreateFolder(folderTypeKey);
 
             var uploadedPath = new List<string>();
 
@@ -55,7 +55,7 @@ namespace ImageManagement.Api.Services
 
         public async Task<ImageUploadResult> UploadImageAsync(IFormFile file, int uploaderId, string folderTypeKey, CancellationToken cancellationToken = default)
         {
-            var folder = FolderFactory.CreateFolder(folderTypeKey);
+            var folder = FolderTypeFactory.CreateFolder(folderTypeKey);
             return await ConstructImageUploadResult(file, folder, cancellationToken);
         }
 
@@ -93,7 +93,7 @@ namespace ImageManagement.Api.Services
             return new ImageDemensions(image.Height, image.Width);
         }
 
-        private async Task<ImageUploadResult> ConstructImageUploadResult(IFormFile file, BaseFolder folder, CancellationToken cancellationToken)
+        private async Task<ImageUploadResult> ConstructImageUploadResult(IFormFile file, BaseFolderType folder, CancellationToken cancellationToken)
         {
             var validFile = FileValidationService.ValidateFile(file);
             var fileExtension = FileValidationService.GetValidatedImageExtension(validFile);

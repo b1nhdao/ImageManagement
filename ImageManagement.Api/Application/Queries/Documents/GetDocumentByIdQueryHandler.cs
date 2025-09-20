@@ -1,9 +1,10 @@
-﻿using ImageManagement.Domain.AggregatesModel.DocumentAggregate;
+﻿using Ardalis.Result;
+using ImageManagement.Domain.AggregatesModel.DocumentAggregate;
 using MediatR;
 
 namespace ImageManagement.Api.Application.Queries.Documents
 {
-    public class GetDocumentByIdQueryHandler : IRequestHandler<GetDocumentByIdQuery, Document?>
+    public class GetDocumentByIdQueryHandler : IRequestHandler<GetDocumentByIdQuery, Result<Document>>
     {
         private readonly IDocumentRepository _documentRepository;
 
@@ -12,9 +13,15 @@ namespace ImageManagement.Api.Application.Queries.Documents
             _documentRepository = documentRepository;
         }
 
-        public async Task<Document?> Handle(GetDocumentByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Result<Document>> Handle(GetDocumentByIdQuery request, CancellationToken cancellationToken)
         {
-            return await _documentRepository.GetByIdAsync(request.Id);
+            var document = await _documentRepository.GetByIdAsync(request.Id);
+            
+            if (document is null)
+            {
+                return Result.NotFound($"Document with id {request.Id} not found");
+            }
+            return Result.Success(document);
         }
     }
 }

@@ -1,10 +1,11 @@
-﻿using ImageManagement.Api.Services.Interfaces;
+﻿using Ardalis.Result;
+using ImageManagement.Api.Services.Interfaces;
 using ImageManagement.Domain.AggregatesModel.DocumentAggregate;
 using MediatR;
 
 namespace ImageManagement.Api.Application.Commands.Documents
 {
-    public class DeleteMultipleDocumentsCommandHandler : IRequestHandler<DeleteMultipleDocumentsCommand, bool>
+    public class DeleteMultipleDocumentsCommandHandler : IRequestHandler<DeleteMultipleDocumentsCommand, Result>
     {
         private readonly IDocumentRepository _documentRepository;
         private readonly IDocumentService _documentService;
@@ -15,19 +16,26 @@ namespace ImageManagement.Api.Application.Commands.Documents
             _documentService = documentService;
         }
 
-        public async Task<bool> Handle(DeleteMultipleDocumentsCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(DeleteMultipleDocumentsCommand request, CancellationToken cancellationToken)
         {
+            var images = await _documentRepository.GetByIdsAsync(request.Ids);
+
+            if (images.Count() < request.Ids.Count())
+            {
+                return Result.NotFound("One of the uploaded Ids are not found");
+            }
+
             try
             {
-                var images = await _documentRepository.GetByIdsAsync(request.Ids);
-
-                if (!images.Any())
-                {
-                    throw new Exception("Not Found");
-                }
-
                 _documentRepository.RemoveRange(images);
+            }
+            catch (Exception ex)
+            {
+                return Result.Error("Error when procesing with database: " + ex);
+            }
 
+            try
+            {
                 foreach (var item in images)
                 {
                     string physicalPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", item.Url.TrimStart('/'));
@@ -37,13 +45,22 @@ namespace ImageManagement.Api.Application.Commands.Documents
                         File.Delete(physicalPath);
                     }
                 }
-
-                return await _documentRepository.UnitOfWork.SaveChangesAsync(cancellationToken) > 0;
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return Result.Error("Error when saving files: " + ex);
             }
+
+            try
+            {
+                await _documentRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                return Result.Error("Error when procesing with database: " + ex);
+            }
+
+            return Result.SuccessWithMessage("Documents deleted successfully");
         }
     }
 }

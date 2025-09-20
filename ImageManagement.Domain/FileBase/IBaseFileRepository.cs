@@ -1,6 +1,6 @@
 ﻿using ImageManagement.Domain.SeedWork;
 
-namespace ImageManagement.Domain.AggregatesModel.FileBaseAggregate
+namespace ImageManagement.Domain.FileBase
 {
     public interface IBaseFileRepository<TEntity> : IRepository where TEntity : BaseFile
     {
@@ -13,5 +13,6 @@ namespace ImageManagement.Domain.AggregatesModel.FileBaseAggregate
         void Remove(TEntity image);
         void RemoveRange(IEnumerable<TEntity> images);
         Task<IEnumerable<TEntity>> GetByIdsAsync(IEnumerable<Guid> ids);
+        Task<IEnumerable<TEntity>> GetByFolderTypeId(Guid id);
     }
 }

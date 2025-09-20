@@ -1,6 +1,6 @@
 ﻿using ImageManagement.Domain.AggregatesModel.ImageAggregate;
 
-namespace ImageManagement.Api.Models.ImageModels
+namespace ImageManagement.Api.Models.FileModels
 {
     public class ImageUploadResult
     {

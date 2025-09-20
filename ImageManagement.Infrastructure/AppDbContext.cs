@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using ImageManagement.Domain.AggregatesModel.DocumentAggregate;
+using ImageManagement.Domain.AggregatesModel.FileTypeAggregate;
 using ImageManagement.Domain.AggregatesModel.ImageAggregate;
 using ImageManagement.Domain.AggregatesModel.UploaderAggregate;
 using ImageManagement.Domain.SeedWork;
@@ -15,6 +16,7 @@ namespace ImageManagement.Infrastructure
         public DbSet<Image> Images { get; set; }
         public DbSet<Uploader> Uploaders { get; set; }
         public DbSet<Document> Documents { get; set; }
+        public DbSet<FileType> FileTypes { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {

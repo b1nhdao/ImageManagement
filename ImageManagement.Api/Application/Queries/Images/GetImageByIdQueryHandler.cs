@@ -1,5 +1,4 @@
-﻿using ImageManagement.Domain.AggregatesModel.FileBaseAggregate;
-using ImageManagement.Domain.AggregatesModel.ImageAggregate;
+﻿using ImageManagement.Domain.AggregatesModel.ImageAggregate;
 using MediatR;
 
 namespace ImageManagement.Api.Application.Queries.Images

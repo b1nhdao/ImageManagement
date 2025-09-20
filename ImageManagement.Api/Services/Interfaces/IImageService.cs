@@ -1,4 +1,4 @@
-﻿using ImageManagement.Api.Models.ImageModels;
+﻿using ImageManagement.Api.Models.FileModels;
 
 namespace ImageManagement.Api.Services.Interfaces
 {
