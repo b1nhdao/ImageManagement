@@ -1,6 +1,6 @@
 ﻿namespace ImageManagement.Api.DTOs
 {
-    public class AddImagesDTO
+    public class AddDocumentsDTO
     {
         public IEnumerable<IFormFile> Files { get; set; }
         public int UploaderId { get; set; }

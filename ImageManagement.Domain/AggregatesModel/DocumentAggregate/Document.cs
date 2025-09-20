@@ -14,6 +14,5 @@ namespace ImageManagement.Domain.AggregatesModel.DocumentAggregate
         {
 
         }
-
     }
 }

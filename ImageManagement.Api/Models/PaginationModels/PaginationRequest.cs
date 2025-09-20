@@ -6,5 +6,7 @@
         public int PageSize { get; set; } = 10;
         public bool IsDescending { get; set; } = false;
         public string KeyWord { get; set; } = string.Empty;
+        public DateOnly? FromDate { get; set; }
+        public DateOnly? ToDate { get; set; }
     }
 }

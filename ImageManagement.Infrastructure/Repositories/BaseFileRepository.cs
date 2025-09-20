@@ -20,11 +20,30 @@ namespace ImageManagement.Infrastructure.Repositories
             return await _context.Set<TEntity>().AsNoTracking().ToListAsync();
         }
 
-        public async Task<(IEnumerable<TEntity>, int TotalCount)> GetPagedByUploaderIdAsync(int uploaderId, int pageIndex, int pageSize, bool isDescending)
+        public async Task<(IEnumerable<TEntity>, int TotalCount)> GetPagedByUploaderIdAsync(int uploaderId, int pageIndex, int pageSize, bool isDescending, string keyword, DateOnly? fromDate = null, DateOnly? toDate = null)
         {
             var query = _context.Set<TEntity>().AsQueryable()
-                .Where(i => i.UploaderId == uploaderId)
-;
+                .Where(i => i.UploaderId == uploaderId);
+
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                var k = keyword.Trim().ToLower();
+                query = query.Where(i => i.Name.ToLower().Contains(k));
+            }
+
+            if (fromDate.HasValue)
+            {
+                var fromDateTimeUtc = fromDate.Value.ToDateTime(TimeOnly.MinValue, DateTimeKind.Utc);
+                query = query.Where(i => i.UploadedTime >= fromDateTimeUtc);
+            }
+
+            if (toDate.HasValue)
+            {
+                var toDateTimeUtc = fromDate.Value.ToDateTime(TimeOnly.MaxValue, DateTimeKind.Utc);
+                query = query.Where(i => i.UploadedTime <= toDateTimeUtc);
+            }
+
+
             int count = await query.CountAsync();
 
             query = isDescending ? query
@@ -48,9 +67,27 @@ namespace ImageManagement.Infrastructure.Repositories
             return await _context.Set<TEntity>().FirstOrDefaultAsync(i => i.Id == id);
         }
 
-        public async Task<(IEnumerable<TEntity>, int TotalCount)> GetPagedAsync(int pageIndex, int pageSize, bool isDescending)
+        public async Task<(IEnumerable<TEntity>, int TotalCount)> GetPagedAsync(int pageIndex, int pageSize, bool isDescending, string keyword, DateOnly? fromDate = null, DateOnly? toDate = null)
         {
             var query = _context.Set<TEntity>().AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                var k = keyword.Trim().ToLower();
+                query = query.Where(i => i.Name.ToLower().Contains(k));
+            }
+
+            if (fromDate.HasValue)
+            {
+                var fromDateTimeUtc = fromDate.Value.ToDateTime(TimeOnly.MinValue, DateTimeKind.Utc);
+                query = query.Where(i => i.UploadedTime >= fromDateTimeUtc);
+            }
+
+            if (toDate.HasValue)
+            {
+                var toDateTimeUtc = fromDate.Value.ToDateTime(TimeOnly.MaxValue, DateTimeKind.Utc);
+                query = query.Where(i => i.UploadedTime <= toDateTimeUtc);
+            }
 
             int count = await query.CountAsync();
 

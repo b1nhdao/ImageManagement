@@ -35,7 +35,7 @@ namespace ImageManagement.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadImageByType([FromForm] AddImageDTO addImageDTO)
+        public async Task<IActionResult> UploadImage([FromForm] AddImageDTO addImageDTO)
         {
             var command = new UploadImageCommand(addImageDTO.File, addImageDTO.UploaderId, addImageDTO.FolderFileKey);
             var result = await _mediator.Send(command);

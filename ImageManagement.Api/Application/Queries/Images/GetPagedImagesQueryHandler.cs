@@ -18,8 +18,11 @@ namespace ImageManagement.Api.Application.Queries.Images
             int pageIndex = request.PaginationRequest.PageIndex;
             int pageSize = request.PaginationRequest.PageSize;
             bool isDescending = request.PaginationRequest.IsDescending;
+            string keyword = request.PaginationRequest.KeyWord;
+            DateOnly? fromDate = request.PaginationRequest.FromDate;
+            DateOnly? toDate = request.PaginationRequest.ToDate;
 
-            var (item, totalCount) = await _imageRepository.GetPagedAsync(pageIndex,pageSize,isDescending);
+            var (item, totalCount) = await _imageRepository.GetPagedAsync(pageIndex,pageSize,isDescending, keyword, fromDate, toDate);
 
             return new PaginationResponse<Image>(pageIndex, pageSize, totalCount, item);
         }

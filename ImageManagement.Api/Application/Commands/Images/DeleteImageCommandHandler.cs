@@ -1,4 +1,4 @@
-﻿using ImageManagement.Api.Services;
+﻿using ImageManagement.Api.Services.Interfaces;
 using ImageManagement.Domain.AggregatesModel.FileBaseAggregate;
 using ImageManagement.Domain.AggregatesModel.ImageAggregate;
 using MediatR;

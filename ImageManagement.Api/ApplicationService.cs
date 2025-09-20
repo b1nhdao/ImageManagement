@@ -1,5 +1,6 @@
 ﻿using ImageManagement.Api.Services;
-using ImageManagement.Domain.AggregatesModel.FileBaseAggregate;
+using ImageManagement.Api.Services.Interfaces;
+using ImageManagement.Domain.AggregatesModel.DocumentAggregate;
 using ImageManagement.Domain.AggregatesModel.ImageAggregate;
 using ImageManagement.Domain.AggregatesModel.UploaderAggregate;
 using ImageManagement.Infrastructure;
@@ -24,9 +25,11 @@ namespace ImageManagement.Api
 
             builder.Services.AddScoped<IImageRepository, ImageRepository>();
             builder.Services.AddScoped<IUploaderRepository, UploaderRepository>();
-            builder.Services.AddScoped<IImageService, ImageService>();
+            builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 
+            builder.Services.AddScoped<IFileStorageService, FileStorageService>();
             builder.Services.AddScoped<IImageService, ImageService>();
+            builder.Services.AddScoped<IDocumentService, DocumentService>();
 
             return builder;
         }

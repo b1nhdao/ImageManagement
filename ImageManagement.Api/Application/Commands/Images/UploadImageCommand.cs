@@ -7,7 +7,7 @@ namespace ImageManagement.Api.Application.Commands.Images
     {
         public IFormFile Files { get; set; }
         public int UploaderId { get; set; }
-        public string FolderTypeKey { get; set; }
+        public string FolderTypeKey { get; set; } = string.Empty;
 
         public UploadImageCommand(IFormFile files, int uploaderId, string folderTypeKey)
         {

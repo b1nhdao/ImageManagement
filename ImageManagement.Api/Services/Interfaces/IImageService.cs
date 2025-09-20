@@ -1,6 +1,6 @@
 ﻿using ImageManagement.Api.Models.ImageModels;
 
-namespace ImageManagement.Api.Services
+namespace ImageManagement.Api.Services.Interfaces
 {
     public interface IImageService
     {
